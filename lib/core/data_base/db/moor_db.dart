@@ -5,6 +5,7 @@ import 'package:haelth_app/core/data_base/tables/diet_t.dart';
 import 'package:haelth_app/core/data_base/tables/doctor_t.dart';
 import 'package:haelth_app/core/data_base/tables/food_t.dart';
 import 'package:haelth_app/core/data_base/tables/medicine_t.dart';
+import 'package:haelth_app/core/data_base/tables/notification_t.dart';
 import 'package:moor/ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -15,17 +16,14 @@ part 'moor_db.g.dart';
 
 
 LazyDatabase _openConnection() {
-  // the LazyDatabase util lets us find the right location for the file async.
   return LazyDatabase(() async {
-    // put the database file, called db.sql here, into the documents folder
-    // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sql'));
-    return VmDatabase(file);
+    return VmDatabase(file,logStatements: true);
   });
 }
 
-@UseMoor(tables: [Doctors, AnalysisNames, Analysises, Dates, Diets, Foods, Medicines])
+@UseMoor(tables: [Doctors, AnalysisNames, Analysises, Dates, Diets, Foods, Medicines, Notifications])
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
@@ -40,6 +38,8 @@ class MyDatabase extends _$MyDatabase {
   Stream<List<Diet>> get watchAllDiets => select(diets).watch();
   Stream<List<Medicine>> get watchAllMedicines => select(medicines).watch();
 
+  Stream<List<Doctor>> watchDoctor(int doctorId) => (select(doctors)..where((t) => t.id.equals(doctorId))).watch();
+
   Stream<List<Medicine>> watchAllDietMedicines(int dietId) => (select(medicines)..where((t) => t.dietId.equals(dietId))).watch();
   Stream<List<Food>> watchAllDietFoods(int dietId) => (select(foods)..where((t) => t.dietId.equals(dietId))).watch();
   Stream<List<Analysis>> watchAllAnalysis(int analysisNameId) => (select(analysises)..where((t) => t.nameId.equals(analysisNameId))).watch();
@@ -47,7 +47,10 @@ class MyDatabase extends _$MyDatabase {
 
   Future deleteMedicine(int id) => (delete(medicines)..where((t)=>t.id.equals(id))).go();
   Future deleteDate(int id) => (delete(dates)..where((t)=>t.id.equals(id))).go();
-  Future deleteDoctor(int id) => (delete(doctors)..where((t)=>t.id.equals(id))).go();
+  Future deleteDoctor(int id) {
+    (delete(dates)..where((tbl) => tbl.doctorId.equals(id))).go();
+    return (delete(doctors)..where((t)=>t.id.equals(id))).go();
+  }
   Future deleteDiet(int id) => (delete(diets)..where((t)=>t.id.equals(id))).go();
   Future deleteFood(int id) => (delete(foods)..where((t)=>t.id.equals(id))).go();
   Future deleteAnalysisName(int id) => (delete(analysisNames)..where((t)=>t.id.equals(id))).go();

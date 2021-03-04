@@ -12,11 +12,13 @@ class Doctor extends DataClass implements Insertable<Doctor> {
   final String name;
   final String phone;
   final String address;
+  final String specialty;
   Doctor(
       {@required this.id,
       @required this.name,
       @required this.phone,
-      @required this.address});
+      @required this.address,
+      @required this.specialty});
   factory Doctor.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -29,6 +31,8 @@ class Doctor extends DataClass implements Insertable<Doctor> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}phone']),
       address:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}address']),
+      specialty: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}specialty']),
     );
   }
   @override
@@ -46,6 +50,9 @@ class Doctor extends DataClass implements Insertable<Doctor> {
     if (!nullToAbsent || address != null) {
       map['address'] = Variable<String>(address);
     }
+    if (!nullToAbsent || specialty != null) {
+      map['specialty'] = Variable<String>(specialty);
+    }
     return map;
   }
 
@@ -58,6 +65,9 @@ class Doctor extends DataClass implements Insertable<Doctor> {
       address: address == null && nullToAbsent
           ? const Value.absent()
           : Value(address),
+      specialty: specialty == null && nullToAbsent
+          ? const Value.absent()
+          : Value(specialty),
     );
   }
 
@@ -69,6 +79,7 @@ class Doctor extends DataClass implements Insertable<Doctor> {
       name: serializer.fromJson<String>(json['name']),
       phone: serializer.fromJson<String>(json['phone']),
       address: serializer.fromJson<String>(json['address']),
+      specialty: serializer.fromJson<String>(json['specialty']),
     );
   }
   @override
@@ -79,15 +90,22 @@ class Doctor extends DataClass implements Insertable<Doctor> {
       'name': serializer.toJson<String>(name),
       'phone': serializer.toJson<String>(phone),
       'address': serializer.toJson<String>(address),
+      'specialty': serializer.toJson<String>(specialty),
     };
   }
 
-  Doctor copyWith({int id, String name, String phone, String address}) =>
+  Doctor copyWith(
+          {int id,
+          String name,
+          String phone,
+          String address,
+          String specialty}) =>
       Doctor(
         id: id ?? this.id,
         name: name ?? this.name,
         phone: phone ?? this.phone,
         address: address ?? this.address,
+        specialty: specialty ?? this.specialty,
       );
   @override
   String toString() {
@@ -95,14 +113,17 @@ class Doctor extends DataClass implements Insertable<Doctor> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('phone: $phone, ')
-          ..write('address: $address')
+          ..write('address: $address, ')
+          ..write('specialty: $specialty')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(name.hashCode, $mrjc(phone.hashCode, address.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(name.hashCode,
+          $mrjc(phone.hashCode, $mrjc(address.hashCode, specialty.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -110,7 +131,8 @@ class Doctor extends DataClass implements Insertable<Doctor> {
           other.id == this.id &&
           other.name == this.name &&
           other.phone == this.phone &&
-          other.address == this.address);
+          other.address == this.address &&
+          other.specialty == this.specialty);
 }
 
 class DoctorsCompanion extends UpdateCompanion<Doctor> {
@@ -118,31 +140,34 @@ class DoctorsCompanion extends UpdateCompanion<Doctor> {
   final Value<String> name;
   final Value<String> phone;
   final Value<String> address;
+  final Value<String> specialty;
   const DoctorsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.phone = const Value.absent(),
     this.address = const Value.absent(),
+    this.specialty = const Value.absent(),
   });
   DoctorsCompanion.insert({
     this.id = const Value.absent(),
     @required String name,
-    @required String phone,
-    @required String address,
-  })  : name = Value(name),
-        phone = Value(phone),
-        address = Value(address);
+    this.phone = const Value.absent(),
+    this.address = const Value.absent(),
+    this.specialty = const Value.absent(),
+  }) : name = Value(name);
   static Insertable<Doctor> custom({
     Expression<int> id,
     Expression<String> name,
     Expression<String> phone,
     Expression<String> address,
+    Expression<String> specialty,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (phone != null) 'phone': phone,
       if (address != null) 'address': address,
+      if (specialty != null) 'specialty': specialty,
     });
   }
 
@@ -150,12 +175,14 @@ class DoctorsCompanion extends UpdateCompanion<Doctor> {
       {Value<int> id,
       Value<String> name,
       Value<String> phone,
-      Value<String> address}) {
+      Value<String> address,
+      Value<String> specialty}) {
     return DoctorsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       phone: phone ?? this.phone,
       address: address ?? this.address,
+      specialty: specialty ?? this.specialty,
     );
   }
 
@@ -174,6 +201,9 @@ class DoctorsCompanion extends UpdateCompanion<Doctor> {
     if (address.present) {
       map['address'] = Variable<String>(address.value);
     }
+    if (specialty.present) {
+      map['specialty'] = Variable<String>(specialty.value);
+    }
     return map;
   }
 
@@ -183,7 +213,8 @@ class DoctorsCompanion extends UpdateCompanion<Doctor> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('phone: $phone, ')
-          ..write('address: $address')
+          ..write('address: $address, ')
+          ..write('specialty: $specialty')
           ..write(')'))
         .toString();
   }
@@ -219,11 +250,8 @@ class $DoctorsTable extends Doctors with TableInfo<$DoctorsTable, Doctor> {
   @override
   GeneratedTextColumn get phone => _phone ??= _constructPhone();
   GeneratedTextColumn _constructPhone() {
-    return GeneratedTextColumn(
-      'phone',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('phone', $tableName, false,
+        defaultValue: const Constant("غير محدد"));
   }
 
   final VerificationMeta _addressMeta = const VerificationMeta('address');
@@ -231,15 +259,21 @@ class $DoctorsTable extends Doctors with TableInfo<$DoctorsTable, Doctor> {
   @override
   GeneratedTextColumn get address => _address ??= _constructAddress();
   GeneratedTextColumn _constructAddress() {
-    return GeneratedTextColumn(
-      'address',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('address', $tableName, false,
+        defaultValue: const Constant("غير محدد"));
+  }
+
+  final VerificationMeta _specialtyMeta = const VerificationMeta('specialty');
+  GeneratedTextColumn _specialty;
+  @override
+  GeneratedTextColumn get specialty => _specialty ??= _constructSpecialty();
+  GeneratedTextColumn _constructSpecialty() {
+    return GeneratedTextColumn('specialty', $tableName, false,
+        defaultValue: const Constant("غير محدد"));
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, name, phone, address];
+  List<GeneratedColumn> get $columns => [id, name, phone, address, specialty];
   @override
   $DoctorsTable get asDslTable => this;
   @override
@@ -263,14 +297,14 @@ class $DoctorsTable extends Doctors with TableInfo<$DoctorsTable, Doctor> {
     if (data.containsKey('phone')) {
       context.handle(
           _phoneMeta, phone.isAcceptableOrUnknown(data['phone'], _phoneMeta));
-    } else if (isInserting) {
-      context.missing(_phoneMeta);
     }
     if (data.containsKey('address')) {
       context.handle(_addressMeta,
           address.isAcceptableOrUnknown(data['address'], _addressMeta));
-    } else if (isInserting) {
-      context.missing(_addressMeta);
+    }
+    if (data.containsKey('specialty')) {
+      context.handle(_specialtyMeta,
+          specialty.isAcceptableOrUnknown(data['specialty'], _specialtyMeta));
     }
     return context;
   }
@@ -1799,6 +1833,7 @@ class Medicine extends DataClass implements Insertable<Medicine> {
   final int id;
   final String name;
   final String unit;
+  final String notes;
   final int repeat;
   final int dietId;
   final DateTime startDate;
@@ -1808,10 +1843,11 @@ class Medicine extends DataClass implements Insertable<Medicine> {
       {@required this.id,
       @required this.name,
       @required this.unit,
+      this.notes,
       @required this.repeat,
-      @required this.dietId,
+      this.dietId,
       @required this.startDate,
-      @required this.endDate,
+      this.endDate,
       @required this.isAfter});
   factory Medicine.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -1824,6 +1860,8 @@ class Medicine extends DataClass implements Insertable<Medicine> {
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       unit: stringType.mapFromDatabaseResponse(data['${effectivePrefix}unit']),
+      notes:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}notes']),
       repeat: intType.mapFromDatabaseResponse(data['${effectivePrefix}repeat']),
       dietId:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}diet_id']),
@@ -1846,6 +1884,9 @@ class Medicine extends DataClass implements Insertable<Medicine> {
     }
     if (!nullToAbsent || unit != null) {
       map['unit'] = Variable<String>(unit);
+    }
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
     }
     if (!nullToAbsent || repeat != null) {
       map['repeat'] = Variable<int>(repeat);
@@ -1870,6 +1911,8 @@ class Medicine extends DataClass implements Insertable<Medicine> {
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       unit: unit == null && nullToAbsent ? const Value.absent() : Value(unit),
+      notes:
+          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
       repeat:
           repeat == null && nullToAbsent ? const Value.absent() : Value(repeat),
       dietId:
@@ -1893,6 +1936,7 @@ class Medicine extends DataClass implements Insertable<Medicine> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       unit: serializer.fromJson<String>(json['unit']),
+      notes: serializer.fromJson<String>(json['notes']),
       repeat: serializer.fromJson<int>(json['repeat']),
       dietId: serializer.fromJson<int>(json['dietId']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
@@ -1907,6 +1951,7 @@ class Medicine extends DataClass implements Insertable<Medicine> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'unit': serializer.toJson<String>(unit),
+      'notes': serializer.toJson<String>(notes),
       'repeat': serializer.toJson<int>(repeat),
       'dietId': serializer.toJson<int>(dietId),
       'startDate': serializer.toJson<DateTime>(startDate),
@@ -1919,6 +1964,7 @@ class Medicine extends DataClass implements Insertable<Medicine> {
           {int id,
           String name,
           String unit,
+          String notes,
           int repeat,
           int dietId,
           DateTime startDate,
@@ -1928,6 +1974,7 @@ class Medicine extends DataClass implements Insertable<Medicine> {
         id: id ?? this.id,
         name: name ?? this.name,
         unit: unit ?? this.unit,
+        notes: notes ?? this.notes,
         repeat: repeat ?? this.repeat,
         dietId: dietId ?? this.dietId,
         startDate: startDate ?? this.startDate,
@@ -1940,6 +1987,7 @@ class Medicine extends DataClass implements Insertable<Medicine> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('unit: $unit, ')
+          ..write('notes: $notes, ')
           ..write('repeat: $repeat, ')
           ..write('dietId: $dietId, ')
           ..write('startDate: $startDate, ')
@@ -1957,11 +2005,13 @@ class Medicine extends DataClass implements Insertable<Medicine> {
           $mrjc(
               unit.hashCode,
               $mrjc(
-                  repeat.hashCode,
+                  notes.hashCode,
                   $mrjc(
-                      dietId.hashCode,
-                      $mrjc(startDate.hashCode,
-                          $mrjc(endDate.hashCode, isAfter.hashCode))))))));
+                      repeat.hashCode,
+                      $mrjc(
+                          dietId.hashCode,
+                          $mrjc(startDate.hashCode,
+                              $mrjc(endDate.hashCode, isAfter.hashCode)))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1969,6 +2019,7 @@ class Medicine extends DataClass implements Insertable<Medicine> {
           other.id == this.id &&
           other.name == this.name &&
           other.unit == this.unit &&
+          other.notes == this.notes &&
           other.repeat == this.repeat &&
           other.dietId == this.dietId &&
           other.startDate == this.startDate &&
@@ -1980,6 +2031,7 @@ class MedicinesCompanion extends UpdateCompanion<Medicine> {
   final Value<int> id;
   final Value<String> name;
   final Value<String> unit;
+  final Value<String> notes;
   final Value<int> repeat;
   final Value<int> dietId;
   final Value<DateTime> startDate;
@@ -1989,6 +2041,7 @@ class MedicinesCompanion extends UpdateCompanion<Medicine> {
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.unit = const Value.absent(),
+    this.notes = const Value.absent(),
     this.repeat = const Value.absent(),
     this.dietId = const Value.absent(),
     this.startDate = const Value.absent(),
@@ -1999,21 +2052,21 @@ class MedicinesCompanion extends UpdateCompanion<Medicine> {
     this.id = const Value.absent(),
     @required String name,
     @required String unit,
+    this.notes = const Value.absent(),
     @required int repeat,
-    @required int dietId,
+    this.dietId = const Value.absent(),
     this.startDate = const Value.absent(),
-    @required DateTime endDate,
+    this.endDate = const Value.absent(),
     @required bool isAfter,
   })  : name = Value(name),
         unit = Value(unit),
         repeat = Value(repeat),
-        dietId = Value(dietId),
-        endDate = Value(endDate),
         isAfter = Value(isAfter);
   static Insertable<Medicine> custom({
     Expression<int> id,
     Expression<String> name,
     Expression<String> unit,
+    Expression<String> notes,
     Expression<int> repeat,
     Expression<int> dietId,
     Expression<DateTime> startDate,
@@ -2024,6 +2077,7 @@ class MedicinesCompanion extends UpdateCompanion<Medicine> {
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (unit != null) 'unit': unit,
+      if (notes != null) 'notes': notes,
       if (repeat != null) 'repeat': repeat,
       if (dietId != null) 'diet_id': dietId,
       if (startDate != null) 'start_date': startDate,
@@ -2036,6 +2090,7 @@ class MedicinesCompanion extends UpdateCompanion<Medicine> {
       {Value<int> id,
       Value<String> name,
       Value<String> unit,
+      Value<String> notes,
       Value<int> repeat,
       Value<int> dietId,
       Value<DateTime> startDate,
@@ -2045,6 +2100,7 @@ class MedicinesCompanion extends UpdateCompanion<Medicine> {
       id: id ?? this.id,
       name: name ?? this.name,
       unit: unit ?? this.unit,
+      notes: notes ?? this.notes,
       repeat: repeat ?? this.repeat,
       dietId: dietId ?? this.dietId,
       startDate: startDate ?? this.startDate,
@@ -2064,6 +2120,9 @@ class MedicinesCompanion extends UpdateCompanion<Medicine> {
     }
     if (unit.present) {
       map['unit'] = Variable<String>(unit.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
     }
     if (repeat.present) {
       map['repeat'] = Variable<int>(repeat.value);
@@ -2089,6 +2148,7 @@ class MedicinesCompanion extends UpdateCompanion<Medicine> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('unit: $unit, ')
+          ..write('notes: $notes, ')
           ..write('repeat: $repeat, ')
           ..write('dietId: $dietId, ')
           ..write('startDate: $startDate, ')
@@ -2137,6 +2197,18 @@ class $MedicinesTable extends Medicines
     );
   }
 
+  final VerificationMeta _notesMeta = const VerificationMeta('notes');
+  GeneratedTextColumn _notes;
+  @override
+  GeneratedTextColumn get notes => _notes ??= _constructNotes();
+  GeneratedTextColumn _constructNotes() {
+    return GeneratedTextColumn(
+      'notes',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _repeatMeta = const VerificationMeta('repeat');
   GeneratedIntColumn _repeat;
   @override
@@ -2157,7 +2229,7 @@ class $MedicinesTable extends Medicines
     return GeneratedIntColumn(
       'diet_id',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -2181,7 +2253,7 @@ class $MedicinesTable extends Medicines
     return GeneratedDateTimeColumn(
       'end_date',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -2199,7 +2271,7 @@ class $MedicinesTable extends Medicines
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, unit, repeat, dietId, startDate, endDate, isAfter];
+      [id, name, unit, notes, repeat, dietId, startDate, endDate, isAfter];
   @override
   $MedicinesTable get asDslTable => this;
   @override
@@ -2226,6 +2298,10 @@ class $MedicinesTable extends Medicines
     } else if (isInserting) {
       context.missing(_unitMeta);
     }
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes'], _notesMeta));
+    }
     if (data.containsKey('repeat')) {
       context.handle(_repeatMeta,
           repeat.isAcceptableOrUnknown(data['repeat'], _repeatMeta));
@@ -2235,8 +2311,6 @@ class $MedicinesTable extends Medicines
     if (data.containsKey('diet_id')) {
       context.handle(_dietIdMeta,
           dietId.isAcceptableOrUnknown(data['diet_id'], _dietIdMeta));
-    } else if (isInserting) {
-      context.missing(_dietIdMeta);
     }
     if (data.containsKey('start_date')) {
       context.handle(_startDateMeta,
@@ -2245,8 +2319,6 @@ class $MedicinesTable extends Medicines
     if (data.containsKey('end_date')) {
       context.handle(_endDateMeta,
           endDate.isAcceptableOrUnknown(data['end_date'], _endDateMeta));
-    } else if (isInserting) {
-      context.missing(_endDateMeta);
     }
     if (data.containsKey('is_after')) {
       context.handle(_isAfterMeta,

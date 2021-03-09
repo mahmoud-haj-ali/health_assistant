@@ -17,7 +17,7 @@ class _DoctorsListPageState extends State<DoctorsListPage> {
   @override
   Widget build(BuildContext context) {
     final floatingButton = FloatingActionButton(
-      onPressed: (){showDialog(context: context,child: AddDoctorDialog());},
+      onPressed: (){showDialog(context: context,builder: (cxt)=> AddDoctorDialog());},
       child: Icon(Icons.add),
     );
     final body = Container(
@@ -44,7 +44,7 @@ class _DoctorsListPageState extends State<DoctorsListPage> {
                 },
                 onIconTap: (){
                   showDialog(context: context,
-                      child: AlertDeleteDialog(
+                      builder: (cxt) => AlertDeleteDialog(
                         onDelete: ()=>db.deleteDoctor(doctors[i].id),
                       ));
                 },

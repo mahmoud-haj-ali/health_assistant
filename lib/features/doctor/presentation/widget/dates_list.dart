@@ -61,8 +61,8 @@ class DatesListWidget extends StatelessWidget {
                           iconSize: 25,
                           onPressed: (){
                             showDialog(context: context,
-                                child: AlertDeleteDialog(
-                                    onDelete: ()=>db.deleteDate(dates[i].id)
+                                builder:(cxt) => AlertDeleteDialog(
+                                    onDelete: () => db.deleteDate(dates[i].id)
                                 ));
                           },
                         ),

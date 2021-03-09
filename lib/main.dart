@@ -11,13 +11,12 @@ void main() {
 }
 
 class App extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "المساعد الصحي",
-      theme: ThemeData(fontFamily: "Tajawal",primaryColor: Colors.teal, accentColor: Colors.teal,
-      floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.teal)),
-      themeMode: ThemeMode.light,
+      theme: ThemeData(fontFamily: "Tajawal", primaryColor: Colors.teal, accentColor: Colors.teal),
       home: HomePage(),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: GenerateScreen.onGenerate,

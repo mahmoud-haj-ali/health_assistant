@@ -9,15 +9,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade200,
-        primary: true,
-        body: body(),
-      ),
+    return Scaffold(
+      backgroundColor: Colors.grey.shade200,
+      primary: true,
+      body: body(),
     );
   }
 
@@ -31,6 +28,7 @@ class _HomePageState extends State<HomePage> {
           left: 0,
           child: Container(color: Colors.teal)),
         Positioned.fill(
+          top: 10,
           child: Column(
             children: [
               header(),
@@ -56,10 +54,11 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("المساعد الصحي",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.white,),),
+                  Text("المساعد الصحي",
+                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.white,),),
                   SizedBox(height: 10,),
                   Text("يساعدك هذا التطبيق في جدولة مواعيد الأطباء لديك، ومواعيد جرعات الدواء، والحميات المتبعة، وكافة التحاليل التي قمت بعملها.",
-                    style: TextStyle(fontWeight: FontWeight.w600,fontSize: 14,color: Colors.white,letterSpacing: 2),
+                    style: TextStyle(fontWeight: FontWeight.w600,fontSize: 14,color: Colors.white,wordSpacing: 2),
                   ),
                 ],
               ),
@@ -78,9 +77,13 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
       child: Column(
         children: [
-          Expanded(flex:1,child: MainCard(text: "الأدوية",onPressed: (){
-            Navigator.pushNamed(context, NameScreen.MEDICINES_LIST_PAGE);
-          },imageName: "medicine.jpg",color: Colors.red.shade900,)),
+          Expanded(flex:1 , child: MainCard(text: "الأدوية",
+            onPressed: (){
+              Navigator.pushNamed(context, NameScreen.MEDICINES_LIST_PAGE);
+            },
+            imageName: "medicine.jpg",
+            color: Colors.red.shade900,)),
+          SizedBox(height: 2,),
           Expanded(flex:1,child: MainCard(text: "الأطباء",onPressed: (){
             Navigator.pushNamed(context, NameScreen.DOCTORS_LIST_PAGE);
           },imageName: "doctors.jpg",color: Colors.lightBlue.shade900,)),

@@ -1,8 +1,11 @@
 import 'package:moor/moor.dart';
 
-class Notifications extends Table {
+@DataClassName("MedicineReminder")
+class MedicineReminders extends Table {
   IntColumn get id => integer().autoIncrement()();
+  IntColumn get medicineId => integer()();
   DateTimeColumn get date => dateTime()();
+  TextColumn get content => text()();
 
   @override
   Set<Column> get primaryKey => {id};

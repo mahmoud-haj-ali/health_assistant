@@ -1,5 +1,5 @@
 
-class AddDoctorState{
+class AddDoctorState {
   String name;
   String number;
   String specialty;

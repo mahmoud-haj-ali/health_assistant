@@ -14,18 +14,14 @@ import 'dart:io';
 
 part 'moor_db.g.dart';
 
-
-LazyDatabase _openConnection() {
-  return LazyDatabase(() async {
+class A {}
+@UseMoor(tables: [Doctors, AnalysisNames, Analysises, Dates, Diets, Foods, Medicines, MedicineReminders])
+class MyDatabase extends _$MyDatabase {
+  MyDatabase() : super(LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sql'));
     return VmDatabase(file,logStatements: true);
-  });
-}
-
-@UseMoor(tables: [Doctors, AnalysisNames, Analysises, Dates, Diets, Foods, Medicines, Notifications])
-class MyDatabase extends _$MyDatabase {
-  MyDatabase() : super(_openConnection());
+  }));
 
 
   Future<List<Doctor>> get getAllDoctors => select(doctors).get();
@@ -33,17 +29,21 @@ class MyDatabase extends _$MyDatabase {
   Future<List<Diet>> get getAllDiets => select(diets).get();
   Future<List<Medicine>> get getAllMedicines => select(medicines).get();
 
+  Future<List<MedicineReminder>> getMedicineReminders(medicineId) => (select(medicineReminders)..where((tbl) => tbl.medicineId.equals(medicineId))).get();
+
   Stream<List<Doctor>> get watchAllDoctors => select(doctors).watch();
   Stream<List<AnalysisName>> get watchAllAnalysisNames => select(analysisNames).watch();
   Stream<List<Diet>> get watchAllDiets => select(diets).watch();
   Stream<List<Medicine>> get watchAllMedicines => select(medicines).watch();
 
   Stream<List<Doctor>> watchDoctor(int doctorId) => (select(doctors)..where((t) => t.id.equals(doctorId))).watch();
+  Stream<Medicine> watchMedicine(int medicineId) => (select(medicines)..where((t) => t.id.equals(medicineId))).watchSingle();
 
   Stream<List<Medicine>> watchAllDietMedicines(int dietId) => (select(medicines)..where((t) => t.dietId.equals(dietId))).watch();
   Stream<List<Food>> watchAllDietFoods(int dietId) => (select(foods)..where((t) => t.dietId.equals(dietId))).watch();
   Stream<List<Analysis>> watchAllAnalysis(int analysisNameId) => (select(analysises)..where((t) => t.nameId.equals(analysisNameId))).watch();
   Stream<List<Date>> watchAllDoctorDates(int doctorId) => (select(dates)..where((t) => t.doctorId.equals(doctorId))).watch();
+  Stream<List<MedicineReminder>> watchAllMedicineReminders(int medicineId) => (select(medicineReminders)..where((t) => t.medicineId.equals(medicineId))).watch();
 
   Future deleteMedicine(int id) => (delete(medicines)..where((t)=>t.id.equals(id))).go();
   Future deleteDate(int id) => (delete(dates)..where((t)=>t.id.equals(id))).go();
@@ -55,6 +55,8 @@ class MyDatabase extends _$MyDatabase {
   Future deleteFood(int id) => (delete(foods)..where((t)=>t.id.equals(id))).go();
   Future deleteAnalysisName(int id) => (delete(analysisNames)..where((t)=>t.id.equals(id))).go();
   Future deleteAnalysis(int id) => (delete(analysises)..where((t)=>t.id.equals(id))).go();
+  Future deleteMedicineReminder(int id) => (delete(medicineReminders)..where((t)=>t.id.equals(id))).go();
+  Future deleteMedicineReminders(int medicineId) => (delete(medicineReminders)..where((t)=>t.medicineId.equals(medicineId))).go();
 
   Future updateMedicine(Medicine entry) => update(medicines).replace(entry);
   Future updateDate(Date entry) => update(dates).replace(entry);
@@ -71,6 +73,7 @@ class MyDatabase extends _$MyDatabase {
   Future<int> addFood(Food entry) => into(foods).insert(entry);
   Future<int> addAnalysisName(AnalysisName entry) => into(analysisNames).insert(entry);
   Future<int> addAnalysis(Analysis entry) => into(analysises).insert(entry);
+  Future<int> addMedicineReminder(MedicineReminder reminder) => into(medicineReminders).insert(reminder);
 
   @override
   int get schemaVersion => 1;

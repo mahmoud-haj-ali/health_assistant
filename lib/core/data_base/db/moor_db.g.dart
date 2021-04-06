@@ -980,19 +980,31 @@ class $AnalysisesTable extends Analysises
 class Date extends DataClass implements Insertable<Date> {
   final int id;
   final DateTime date;
+  final String title;
   final int doctorId;
-  Date({@required this.id, @required this.date, @required this.doctorId});
+  final int notificationId;
+  Date(
+      {@required this.id,
+      @required this.date,
+      this.title,
+      @required this.doctorId,
+      @required this.notificationId});
   factory Date.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
+    final stringType = db.typeSystem.forDartType<String>();
     return Date(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       date:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      title:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
       doctorId:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}doctor_id']),
+      notificationId: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}notification_id']),
     );
   }
   @override
@@ -1004,8 +1016,14 @@ class Date extends DataClass implements Insertable<Date> {
     if (!nullToAbsent || date != null) {
       map['date'] = Variable<DateTime>(date);
     }
+    if (!nullToAbsent || title != null) {
+      map['title'] = Variable<String>(title);
+    }
     if (!nullToAbsent || doctorId != null) {
       map['doctor_id'] = Variable<int>(doctorId);
+    }
+    if (!nullToAbsent || notificationId != null) {
+      map['notification_id'] = Variable<int>(notificationId);
     }
     return map;
   }
@@ -1014,9 +1032,14 @@ class Date extends DataClass implements Insertable<Date> {
     return DatesCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+      title:
+          title == null && nullToAbsent ? const Value.absent() : Value(title),
       doctorId: doctorId == null && nullToAbsent
           ? const Value.absent()
           : Value(doctorId),
+      notificationId: notificationId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notificationId),
     );
   }
 
@@ -1026,7 +1049,9 @@ class Date extends DataClass implements Insertable<Date> {
     return Date(
       id: serializer.fromJson<int>(json['id']),
       date: serializer.fromJson<DateTime>(json['date']),
+      title: serializer.fromJson<String>(json['title']),
       doctorId: serializer.fromJson<int>(json['doctorId']),
+      notificationId: serializer.fromJson<int>(json['notificationId']),
     );
   }
   @override
@@ -1035,70 +1060,105 @@ class Date extends DataClass implements Insertable<Date> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'date': serializer.toJson<DateTime>(date),
+      'title': serializer.toJson<String>(title),
       'doctorId': serializer.toJson<int>(doctorId),
+      'notificationId': serializer.toJson<int>(notificationId),
     };
   }
 
-  Date copyWith({int id, DateTime date, int doctorId}) => Date(
+  Date copyWith(
+          {int id,
+          DateTime date,
+          String title,
+          int doctorId,
+          int notificationId}) =>
+      Date(
         id: id ?? this.id,
         date: date ?? this.date,
+        title: title ?? this.title,
         doctorId: doctorId ?? this.doctorId,
+        notificationId: notificationId ?? this.notificationId,
       );
   @override
   String toString() {
     return (StringBuffer('Date(')
           ..write('id: $id, ')
           ..write('date: $date, ')
-          ..write('doctorId: $doctorId')
+          ..write('title: $title, ')
+          ..write('doctorId: $doctorId, ')
+          ..write('notificationId: $notificationId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      $mrjf($mrjc(id.hashCode, $mrjc(date.hashCode, doctorId.hashCode)));
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          date.hashCode,
+          $mrjc(title.hashCode,
+              $mrjc(doctorId.hashCode, notificationId.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Date &&
           other.id == this.id &&
           other.date == this.date &&
-          other.doctorId == this.doctorId);
+          other.title == this.title &&
+          other.doctorId == this.doctorId &&
+          other.notificationId == this.notificationId);
 }
 
 class DatesCompanion extends UpdateCompanion<Date> {
   final Value<int> id;
   final Value<DateTime> date;
+  final Value<String> title;
   final Value<int> doctorId;
+  final Value<int> notificationId;
   const DatesCompanion({
     this.id = const Value.absent(),
     this.date = const Value.absent(),
+    this.title = const Value.absent(),
     this.doctorId = const Value.absent(),
+    this.notificationId = const Value.absent(),
   });
   DatesCompanion.insert({
     this.id = const Value.absent(),
     @required DateTime date,
+    this.title = const Value.absent(),
     @required int doctorId,
+    @required int notificationId,
   })  : date = Value(date),
-        doctorId = Value(doctorId);
+        doctorId = Value(doctorId),
+        notificationId = Value(notificationId);
   static Insertable<Date> custom({
     Expression<int> id,
     Expression<DateTime> date,
+    Expression<String> title,
     Expression<int> doctorId,
+    Expression<int> notificationId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (date != null) 'date': date,
+      if (title != null) 'title': title,
       if (doctorId != null) 'doctor_id': doctorId,
+      if (notificationId != null) 'notification_id': notificationId,
     });
   }
 
   DatesCompanion copyWith(
-      {Value<int> id, Value<DateTime> date, Value<int> doctorId}) {
+      {Value<int> id,
+      Value<DateTime> date,
+      Value<String> title,
+      Value<int> doctorId,
+      Value<int> notificationId}) {
     return DatesCompanion(
       id: id ?? this.id,
       date: date ?? this.date,
+      title: title ?? this.title,
       doctorId: doctorId ?? this.doctorId,
+      notificationId: notificationId ?? this.notificationId,
     );
   }
 
@@ -1111,8 +1171,14 @@ class DatesCompanion extends UpdateCompanion<Date> {
     if (date.present) {
       map['date'] = Variable<DateTime>(date.value);
     }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
     if (doctorId.present) {
       map['doctor_id'] = Variable<int>(doctorId.value);
+    }
+    if (notificationId.present) {
+      map['notification_id'] = Variable<int>(notificationId.value);
     }
     return map;
   }
@@ -1122,7 +1188,9 @@ class DatesCompanion extends UpdateCompanion<Date> {
     return (StringBuffer('DatesCompanion(')
           ..write('id: $id, ')
           ..write('date: $date, ')
-          ..write('doctorId: $doctorId')
+          ..write('title: $title, ')
+          ..write('doctorId: $doctorId, ')
+          ..write('notificationId: $notificationId')
           ..write(')'))
         .toString();
   }
@@ -1153,6 +1221,18 @@ class $DatesTable extends Dates with TableInfo<$DatesTable, Date> {
     );
   }
 
+  final VerificationMeta _titleMeta = const VerificationMeta('title');
+  GeneratedTextColumn _title;
+  @override
+  GeneratedTextColumn get title => _title ??= _constructTitle();
+  GeneratedTextColumn _constructTitle() {
+    return GeneratedTextColumn(
+      'title',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _doctorIdMeta = const VerificationMeta('doctorId');
   GeneratedIntColumn _doctorId;
   @override
@@ -1165,8 +1245,23 @@ class $DatesTable extends Dates with TableInfo<$DatesTable, Date> {
     );
   }
 
+  final VerificationMeta _notificationIdMeta =
+      const VerificationMeta('notificationId');
+  GeneratedIntColumn _notificationId;
   @override
-  List<GeneratedColumn> get $columns => [id, date, doctorId];
+  GeneratedIntColumn get notificationId =>
+      _notificationId ??= _constructNotificationId();
+  GeneratedIntColumn _constructNotificationId() {
+    return GeneratedIntColumn(
+      'notification_id',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, date, title, doctorId, notificationId];
   @override
   $DatesTable get asDslTable => this;
   @override
@@ -1187,11 +1282,23 @@ class $DatesTable extends Dates with TableInfo<$DatesTable, Date> {
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
+    }
     if (data.containsKey('doctor_id')) {
       context.handle(_doctorIdMeta,
           doctorId.isAcceptableOrUnknown(data['doctor_id'], _doctorIdMeta));
     } else if (isInserting) {
       context.missing(_doctorIdMeta);
+    }
+    if (data.containsKey('notification_id')) {
+      context.handle(
+          _notificationIdMeta,
+          notificationId.isAcceptableOrUnknown(
+              data['notification_id'], _notificationIdMeta));
+    } else if (isInserting) {
+      context.missing(_notificationIdMeta);
     }
     return context;
   }
@@ -1843,7 +1950,7 @@ class Medicine extends DataClass implements Insertable<Medicine> {
       {@required this.id,
       @required this.name,
       @required this.unit,
-      this.notes,
+      @required this.notes,
       @required this.repeat,
       this.dietId,
       @required this.startDate,
@@ -2202,11 +2309,8 @@ class $MedicinesTable extends Medicines
   @override
   GeneratedTextColumn get notes => _notes ??= _constructNotes();
   GeneratedTextColumn _constructNotes() {
-    return GeneratedTextColumn(
-      'notes',
-      $tableName,
-      true,
-    );
+    return GeneratedTextColumn('notes', $tableName, false,
+        defaultValue: const Constant("غير محدد"));
   }
 
   final VerificationMeta _repeatMeta = const VerificationMeta('repeat');
@@ -2343,6 +2447,297 @@ class $MedicinesTable extends Medicines
   }
 }
 
+class MedicineReminder extends DataClass
+    implements Insertable<MedicineReminder> {
+  final int id;
+  final int medicineId;
+  final DateTime date;
+  final String content;
+  MedicineReminder(
+      {@required this.id,
+      @required this.medicineId,
+      @required this.date,
+      @required this.content});
+  factory MedicineReminder.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return MedicineReminder(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      medicineId: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}medicine_id']),
+      date:
+          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      content:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}content']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || medicineId != null) {
+      map['medicine_id'] = Variable<int>(medicineId);
+    }
+    if (!nullToAbsent || date != null) {
+      map['date'] = Variable<DateTime>(date);
+    }
+    if (!nullToAbsent || content != null) {
+      map['content'] = Variable<String>(content);
+    }
+    return map;
+  }
+
+  MedicineRemindersCompanion toCompanion(bool nullToAbsent) {
+    return MedicineRemindersCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      medicineId: medicineId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(medicineId),
+      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+      content: content == null && nullToAbsent
+          ? const Value.absent()
+          : Value(content),
+    );
+  }
+
+  factory MedicineReminder.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MedicineReminder(
+      id: serializer.fromJson<int>(json['id']),
+      medicineId: serializer.fromJson<int>(json['medicineId']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      content: serializer.fromJson<String>(json['content']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'medicineId': serializer.toJson<int>(medicineId),
+      'date': serializer.toJson<DateTime>(date),
+      'content': serializer.toJson<String>(content),
+    };
+  }
+
+  MedicineReminder copyWith(
+          {int id, int medicineId, DateTime date, String content}) =>
+      MedicineReminder(
+        id: id ?? this.id,
+        medicineId: medicineId ?? this.medicineId,
+        date: date ?? this.date,
+        content: content ?? this.content,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MedicineReminder(')
+          ..write('id: $id, ')
+          ..write('medicineId: $medicineId, ')
+          ..write('date: $date, ')
+          ..write('content: $content')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(id.hashCode,
+      $mrjc(medicineId.hashCode, $mrjc(date.hashCode, content.hashCode))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is MedicineReminder &&
+          other.id == this.id &&
+          other.medicineId == this.medicineId &&
+          other.date == this.date &&
+          other.content == this.content);
+}
+
+class MedicineRemindersCompanion extends UpdateCompanion<MedicineReminder> {
+  final Value<int> id;
+  final Value<int> medicineId;
+  final Value<DateTime> date;
+  final Value<String> content;
+  const MedicineRemindersCompanion({
+    this.id = const Value.absent(),
+    this.medicineId = const Value.absent(),
+    this.date = const Value.absent(),
+    this.content = const Value.absent(),
+  });
+  MedicineRemindersCompanion.insert({
+    this.id = const Value.absent(),
+    @required int medicineId,
+    @required DateTime date,
+    @required String content,
+  })  : medicineId = Value(medicineId),
+        date = Value(date),
+        content = Value(content);
+  static Insertable<MedicineReminder> custom({
+    Expression<int> id,
+    Expression<int> medicineId,
+    Expression<DateTime> date,
+    Expression<String> content,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (medicineId != null) 'medicine_id': medicineId,
+      if (date != null) 'date': date,
+      if (content != null) 'content': content,
+    });
+  }
+
+  MedicineRemindersCompanion copyWith(
+      {Value<int> id,
+      Value<int> medicineId,
+      Value<DateTime> date,
+      Value<String> content}) {
+    return MedicineRemindersCompanion(
+      id: id ?? this.id,
+      medicineId: medicineId ?? this.medicineId,
+      date: date ?? this.date,
+      content: content ?? this.content,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (medicineId.present) {
+      map['medicine_id'] = Variable<int>(medicineId.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MedicineRemindersCompanion(')
+          ..write('id: $id, ')
+          ..write('medicineId: $medicineId, ')
+          ..write('date: $date, ')
+          ..write('content: $content')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MedicineRemindersTable extends MedicineReminders
+    with TableInfo<$MedicineRemindersTable, MedicineReminder> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $MedicineRemindersTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _medicineIdMeta = const VerificationMeta('medicineId');
+  GeneratedIntColumn _medicineId;
+  @override
+  GeneratedIntColumn get medicineId => _medicineId ??= _constructMedicineId();
+  GeneratedIntColumn _constructMedicineId() {
+    return GeneratedIntColumn(
+      'medicine_id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  GeneratedDateTimeColumn _date;
+  @override
+  GeneratedDateTimeColumn get date => _date ??= _constructDate();
+  GeneratedDateTimeColumn _constructDate() {
+    return GeneratedDateTimeColumn(
+      'date',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _contentMeta = const VerificationMeta('content');
+  GeneratedTextColumn _content;
+  @override
+  GeneratedTextColumn get content => _content ??= _constructContent();
+  GeneratedTextColumn _constructContent() {
+    return GeneratedTextColumn(
+      'content',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, medicineId, date, content];
+  @override
+  $MedicineRemindersTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'medicine_reminders';
+  @override
+  final String actualTableName = 'medicine_reminders';
+  @override
+  VerificationContext validateIntegrity(Insertable<MedicineReminder> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('medicine_id')) {
+      context.handle(
+          _medicineIdMeta,
+          medicineId.isAcceptableOrUnknown(
+              data['medicine_id'], _medicineIdMeta));
+    } else if (isInserting) {
+      context.missing(_medicineIdMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date'], _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('content')) {
+      context.handle(_contentMeta,
+          content.isAcceptableOrUnknown(data['content'], _contentMeta));
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MedicineReminder map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return MedicineReminder.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $MedicineRemindersTable createAlias(String alias) {
+    return $MedicineRemindersTable(_db, alias);
+  }
+}
+
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $DoctorsTable _doctors;
@@ -2360,9 +2755,20 @@ abstract class _$MyDatabase extends GeneratedDatabase {
   $FoodsTable get foods => _foods ??= $FoodsTable(this);
   $MedicinesTable _medicines;
   $MedicinesTable get medicines => _medicines ??= $MedicinesTable(this);
+  $MedicineRemindersTable _medicineReminders;
+  $MedicineRemindersTable get medicineReminders =>
+      _medicineReminders ??= $MedicineRemindersTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [doctors, analysisNames, analysises, dates, diets, foods, medicines];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        doctors,
+        analysisNames,
+        analysises,
+        dates,
+        diets,
+        foods,
+        medicines,
+        medicineReminders
+      ];
 }

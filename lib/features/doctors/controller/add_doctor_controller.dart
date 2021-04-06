@@ -30,7 +30,7 @@ class AddDoctorController{
   onChangeNumber(value) =>
       _stateController.add(_state..number = value);
 
-  void onChangeAddress(value) =>
+  onChangeAddress(value) =>
       _stateController.add(_state..address = value);
 
   Future<bool> addDoctor(Doctor doctor) async {

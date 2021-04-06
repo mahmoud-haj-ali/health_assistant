@@ -37,45 +37,36 @@ class _AddDoctorDialogState extends State<AddDoctorDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("يرجى ملئ البيانات التالية:",style: TextStyle(fontWeight: FontWeight.w600),),
-                Form(
-                  child: Column(
-                    children: [
-                      CustomTextField(
-                        onChanged: (value){
-                          controller.onChangeName(value);
-                        },
-                        textInputAction: TextInputAction.next,
-                        labelText: "إسم الطبيب",
-                      ),
-                      if(state.isNameValid)
-                        Align(alignment:Alignment(0.95,0.0),
-                            child: Text("يرجى إدخال اسم",style: TextStyle(color: Colors.red,fontSize: 12,height: 0.5),)),
-                      CustomTextField(
-                        onChanged: (value){
-                          controller.onChangeNumber(value);
-                        },
-                        keyboardType: TextInputType.numberWithOptions(decimal: true,signed: true),
-                        textInputAction: TextInputAction.next,
-                        labelText: "رقم الطبيب",
-                      ),
-                      CustomTextField(
-                        onChanged: (value){
-                          controller.onChangeSpecialty(value);
-                        },
-                        textInputAction: TextInputAction.next,
-                        labelText: "إختصاص الطبيب",
-                      ),
-                      CustomTextField(
-                        onChanged: (value){
-                          controller.onChangeAddress(value);
-                        },
-                        labelText: "عنوان الطبيب",
-                      ),
-                    ],
-
-                  )
+                CustomTextField(
+                  onChanged: (value){
+                    controller.onChangeName(value);
+                  },
+                  textInputAction: TextInputAction.next,
+                  labelText: "إسم الطبيب",
                 ),
-
+                if(state.isNameValid)
+                  Text("يرجى إدخال اسم",style: TextStyle(color: Colors.red,fontSize: 12,height: 0.5),),
+                CustomTextField(
+                  onChanged: (value){
+                    controller.onChangeNumber(value);
+                  },
+                  keyboardType: TextInputType.numberWithOptions(decimal: true,signed: true),
+                  textInputAction: TextInputAction.next,
+                  labelText: "رقم الطبيب",
+                ),
+                CustomTextField(
+                  onChanged: (value){
+                    controller.onChangeSpecialty(value);
+                  },
+                  textInputAction: TextInputAction.next,
+                  labelText: "إختصاص الطبيب",
+                ),
+                CustomTextField(
+                  onChanged: (value){
+                    controller.onChangeAddress(value);
+                  },
+                  labelText: "عنوان الطبيب",
+                ),
                 SizedBox(height: 5,),
                 Align(
                   alignment: Alignment.centerLeft,

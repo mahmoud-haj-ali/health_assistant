@@ -8,6 +8,7 @@ import 'package:haelth_app/features/doctors/presentation/widget/add_doctor_dialo
 import 'package:haelth_app/main.dart';
 
 class DoctorsListPage extends StatefulWidget {
+
   @override
   _DoctorsListPageState createState() => _DoctorsListPageState();
 }
@@ -17,7 +18,11 @@ class _DoctorsListPageState extends State<DoctorsListPage> {
   @override
   Widget build(BuildContext context) {
     final floatingButton = FloatingActionButton(
-      onPressed: (){showDialog(context: context,builder: (cxt)=> AddDoctorDialog());},
+      onPressed: (){
+        showDialog(
+          context: context,
+          builder: (_) => AddDoctorDialog());
+      },
       child: Icon(Icons.add),
     );
     final body = Container(
@@ -40,7 +45,7 @@ class _DoctorsListPageState extends State<DoctorsListPage> {
                 title: "اسم الطبيب: ${doctors[i].name}",
                 subtitle: "الاختصاص: ${doctors[i].specialty}",
                 onTap: (){
-                  Navigator.pushNamed(context, NameScreen.DOCTOR_DETAILS_PAGE,arguments: doctors[i]);
+                  Navigator.pushNamed(context, NameScreen.doctor_details_page,arguments: doctors[i]);
                 },
                 onIconTap: (){
                   showDialog(context: context,

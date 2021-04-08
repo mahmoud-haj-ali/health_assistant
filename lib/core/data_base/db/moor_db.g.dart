@@ -557,17 +557,17 @@ class $AnalysisNamesTable extends AnalysisNames
 
 class Analysis extends DataClass implements Insertable<Analysis> {
   final int id;
-  final String name;
   final String image;
-  final int value;
+  final String name;
+  final String value;
   final String notes;
   final DateTime lastDate;
   final int nameId;
   Analysis(
       {@required this.id,
-      @required this.name,
       this.image,
-      this.value,
+      this.name,
+      @required this.value,
       this.notes,
       @required this.lastDate,
       @required this.nameId});
@@ -579,10 +579,11 @@ class Analysis extends DataClass implements Insertable<Analysis> {
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return Analysis(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       image:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}image']),
-      value: intType.mapFromDatabaseResponse(data['${effectivePrefix}value']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      value:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}value']),
       notes:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}notes']),
       lastDate: dateTimeType
@@ -597,14 +598,14 @@ class Analysis extends DataClass implements Insertable<Analysis> {
     if (!nullToAbsent || id != null) {
       map['id'] = Variable<int>(id);
     }
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
     if (!nullToAbsent || image != null) {
       map['image'] = Variable<String>(image);
     }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
     if (!nullToAbsent || value != null) {
-      map['value'] = Variable<int>(value);
+      map['value'] = Variable<String>(value);
     }
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
@@ -621,9 +622,9 @@ class Analysis extends DataClass implements Insertable<Analysis> {
   AnalysisesCompanion toCompanion(bool nullToAbsent) {
     return AnalysisesCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       image:
           image == null && nullToAbsent ? const Value.absent() : Value(image),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       value:
           value == null && nullToAbsent ? const Value.absent() : Value(value),
       notes:
@@ -641,9 +642,9 @@ class Analysis extends DataClass implements Insertable<Analysis> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Analysis(
       id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
       image: serializer.fromJson<String>(json['image']),
-      value: serializer.fromJson<int>(json['value']),
+      name: serializer.fromJson<String>(json['name']),
+      value: serializer.fromJson<String>(json['value']),
       notes: serializer.fromJson<String>(json['notes']),
       lastDate: serializer.fromJson<DateTime>(json['lastDate']),
       nameId: serializer.fromJson<int>(json['nameId']),
@@ -654,9 +655,9 @@ class Analysis extends DataClass implements Insertable<Analysis> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
       'image': serializer.toJson<String>(image),
-      'value': serializer.toJson<int>(value),
+      'name': serializer.toJson<String>(name),
+      'value': serializer.toJson<String>(value),
       'notes': serializer.toJson<String>(notes),
       'lastDate': serializer.toJson<DateTime>(lastDate),
       'nameId': serializer.toJson<int>(nameId),
@@ -665,16 +666,16 @@ class Analysis extends DataClass implements Insertable<Analysis> {
 
   Analysis copyWith(
           {int id,
-          String name,
           String image,
-          int value,
+          String name,
+          String value,
           String notes,
           DateTime lastDate,
           int nameId}) =>
       Analysis(
         id: id ?? this.id,
-        name: name ?? this.name,
         image: image ?? this.image,
+        name: name ?? this.name,
         value: value ?? this.value,
         notes: notes ?? this.notes,
         lastDate: lastDate ?? this.lastDate,
@@ -684,8 +685,8 @@ class Analysis extends DataClass implements Insertable<Analysis> {
   String toString() {
     return (StringBuffer('Analysis(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
           ..write('image: $image, ')
+          ..write('name: $name, ')
           ..write('value: $value, ')
           ..write('notes: $notes, ')
           ..write('lastDate: $lastDate, ')
@@ -698,9 +699,9 @@ class Analysis extends DataClass implements Insertable<Analysis> {
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
       $mrjc(
-          name.hashCode,
+          image.hashCode,
           $mrjc(
-              image.hashCode,
+              name.hashCode,
               $mrjc(
                   value.hashCode,
                   $mrjc(notes.hashCode,
@@ -710,8 +711,8 @@ class Analysis extends DataClass implements Insertable<Analysis> {
       identical(this, other) ||
       (other is Analysis &&
           other.id == this.id &&
-          other.name == this.name &&
           other.image == this.image &&
+          other.name == this.name &&
           other.value == this.value &&
           other.notes == this.notes &&
           other.lastDate == this.lastDate &&
@@ -720,16 +721,16 @@ class Analysis extends DataClass implements Insertable<Analysis> {
 
 class AnalysisesCompanion extends UpdateCompanion<Analysis> {
   final Value<int> id;
-  final Value<String> name;
   final Value<String> image;
-  final Value<int> value;
+  final Value<String> name;
+  final Value<String> value;
   final Value<String> notes;
   final Value<DateTime> lastDate;
   final Value<int> nameId;
   const AnalysisesCompanion({
     this.id = const Value.absent(),
-    this.name = const Value.absent(),
     this.image = const Value.absent(),
+    this.name = const Value.absent(),
     this.value = const Value.absent(),
     this.notes = const Value.absent(),
     this.lastDate = const Value.absent(),
@@ -737,28 +738,28 @@ class AnalysisesCompanion extends UpdateCompanion<Analysis> {
   });
   AnalysisesCompanion.insert({
     this.id = const Value.absent(),
-    @required String name,
     this.image = const Value.absent(),
-    this.value = const Value.absent(),
+    this.name = const Value.absent(),
+    @required String value,
     this.notes = const Value.absent(),
     @required DateTime lastDate,
     @required int nameId,
-  })  : name = Value(name),
+  })  : value = Value(value),
         lastDate = Value(lastDate),
         nameId = Value(nameId);
   static Insertable<Analysis> custom({
     Expression<int> id,
-    Expression<String> name,
     Expression<String> image,
-    Expression<int> value,
+    Expression<String> name,
+    Expression<String> value,
     Expression<String> notes,
     Expression<DateTime> lastDate,
     Expression<int> nameId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (name != null) 'name': name,
       if (image != null) 'image': image,
+      if (name != null) 'name': name,
       if (value != null) 'value': value,
       if (notes != null) 'notes': notes,
       if (lastDate != null) 'last_date': lastDate,
@@ -768,16 +769,16 @@ class AnalysisesCompanion extends UpdateCompanion<Analysis> {
 
   AnalysisesCompanion copyWith(
       {Value<int> id,
-      Value<String> name,
       Value<String> image,
-      Value<int> value,
+      Value<String> name,
+      Value<String> value,
       Value<String> notes,
       Value<DateTime> lastDate,
       Value<int> nameId}) {
     return AnalysisesCompanion(
       id: id ?? this.id,
-      name: name ?? this.name,
       image: image ?? this.image,
+      name: name ?? this.name,
       value: value ?? this.value,
       notes: notes ?? this.notes,
       lastDate: lastDate ?? this.lastDate,
@@ -791,14 +792,14 @@ class AnalysisesCompanion extends UpdateCompanion<Analysis> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
     if (image.present) {
       map['image'] = Variable<String>(image.value);
     }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
     if (value.present) {
-      map['value'] = Variable<int>(value.value);
+      map['value'] = Variable<String>(value.value);
     }
     if (notes.present) {
       map['notes'] = Variable<String>(notes.value);
@@ -816,8 +817,8 @@ class AnalysisesCompanion extends UpdateCompanion<Analysis> {
   String toString() {
     return (StringBuffer('AnalysisesCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
           ..write('image: $image, ')
+          ..write('name: $name, ')
           ..write('value: $value, ')
           ..write('notes: $notes, ')
           ..write('lastDate: $lastDate, ')
@@ -841,18 +842,6 @@ class $AnalysisesTable extends Analysises
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
   }
 
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
-  @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn(
-      'name',
-      $tableName,
-      false,
-    );
-  }
-
   final VerificationMeta _imageMeta = const VerificationMeta('image');
   GeneratedTextColumn _image;
   @override
@@ -865,15 +854,27 @@ class $AnalysisesTable extends Analysises
     );
   }
 
-  final VerificationMeta _valueMeta = const VerificationMeta('value');
-  GeneratedIntColumn _value;
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
   @override
-  GeneratedIntColumn get value => _value ??= _constructValue();
-  GeneratedIntColumn _constructValue() {
-    return GeneratedIntColumn(
-      'value',
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn(
+      'name',
       $tableName,
       true,
+    );
+  }
+
+  final VerificationMeta _valueMeta = const VerificationMeta('value');
+  GeneratedTextColumn _value;
+  @override
+  GeneratedTextColumn get value => _value ??= _constructValue();
+  GeneratedTextColumn _constructValue() {
+    return GeneratedTextColumn(
+      'value',
+      $tableName,
+      false,
     );
   }
 
@@ -915,7 +916,7 @@ class $AnalysisesTable extends Analysises
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, image, value, notes, lastDate, nameId];
+      [id, image, name, value, notes, lastDate, nameId];
   @override
   $AnalysisesTable get asDslTable => this;
   @override
@@ -930,19 +931,19 @@ class $AnalysisesTable extends Analysises
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
     if (data.containsKey('image')) {
       context.handle(
           _imageMeta, image.isAcceptableOrUnknown(data['image'], _imageMeta));
     }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+    }
     if (data.containsKey('value')) {
       context.handle(
           _valueMeta, value.isAcceptableOrUnknown(data['value'], _valueMeta));
+    } else if (isInserting) {
+      context.missing(_valueMeta);
     }
     if (data.containsKey('notes')) {
       context.handle(
@@ -982,13 +983,11 @@ class Date extends DataClass implements Insertable<Date> {
   final DateTime date;
   final String title;
   final int doctorId;
-  final int notificationId;
   Date(
       {@required this.id,
       @required this.date,
       this.title,
-      @required this.doctorId,
-      @required this.notificationId});
+      @required this.doctorId});
   factory Date.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -1003,8 +1002,6 @@ class Date extends DataClass implements Insertable<Date> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
       doctorId:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}doctor_id']),
-      notificationId: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}notification_id']),
     );
   }
   @override
@@ -1022,9 +1019,6 @@ class Date extends DataClass implements Insertable<Date> {
     if (!nullToAbsent || doctorId != null) {
       map['doctor_id'] = Variable<int>(doctorId);
     }
-    if (!nullToAbsent || notificationId != null) {
-      map['notification_id'] = Variable<int>(notificationId);
-    }
     return map;
   }
 
@@ -1037,9 +1031,6 @@ class Date extends DataClass implements Insertable<Date> {
       doctorId: doctorId == null && nullToAbsent
           ? const Value.absent()
           : Value(doctorId),
-      notificationId: notificationId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(notificationId),
     );
   }
 
@@ -1051,7 +1042,6 @@ class Date extends DataClass implements Insertable<Date> {
       date: serializer.fromJson<DateTime>(json['date']),
       title: serializer.fromJson<String>(json['title']),
       doctorId: serializer.fromJson<int>(json['doctorId']),
-      notificationId: serializer.fromJson<int>(json['notificationId']),
     );
   }
   @override
@@ -1062,22 +1052,14 @@ class Date extends DataClass implements Insertable<Date> {
       'date': serializer.toJson<DateTime>(date),
       'title': serializer.toJson<String>(title),
       'doctorId': serializer.toJson<int>(doctorId),
-      'notificationId': serializer.toJson<int>(notificationId),
     };
   }
 
-  Date copyWith(
-          {int id,
-          DateTime date,
-          String title,
-          int doctorId,
-          int notificationId}) =>
-      Date(
+  Date copyWith({int id, DateTime date, String title, int doctorId}) => Date(
         id: id ?? this.id,
         date: date ?? this.date,
         title: title ?? this.title,
         doctorId: doctorId ?? this.doctorId,
-        notificationId: notificationId ?? this.notificationId,
       );
   @override
   String toString() {
@@ -1085,19 +1067,14 @@ class Date extends DataClass implements Insertable<Date> {
           ..write('id: $id, ')
           ..write('date: $date, ')
           ..write('title: $title, ')
-          ..write('doctorId: $doctorId, ')
-          ..write('notificationId: $notificationId')
+          ..write('doctorId: $doctorId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          date.hashCode,
-          $mrjc(title.hashCode,
-              $mrjc(doctorId.hashCode, notificationId.hashCode)))));
+  int get hashCode => $mrjf($mrjc(id.hashCode,
+      $mrjc(date.hashCode, $mrjc(title.hashCode, doctorId.hashCode))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1105,8 +1082,7 @@ class Date extends DataClass implements Insertable<Date> {
           other.id == this.id &&
           other.date == this.date &&
           other.title == this.title &&
-          other.doctorId == this.doctorId &&
-          other.notificationId == this.notificationId);
+          other.doctorId == this.doctorId);
 }
 
 class DatesCompanion extends UpdateCompanion<Date> {
@@ -1114,36 +1090,30 @@ class DatesCompanion extends UpdateCompanion<Date> {
   final Value<DateTime> date;
   final Value<String> title;
   final Value<int> doctorId;
-  final Value<int> notificationId;
   const DatesCompanion({
     this.id = const Value.absent(),
     this.date = const Value.absent(),
     this.title = const Value.absent(),
     this.doctorId = const Value.absent(),
-    this.notificationId = const Value.absent(),
   });
   DatesCompanion.insert({
     this.id = const Value.absent(),
     @required DateTime date,
     this.title = const Value.absent(),
     @required int doctorId,
-    @required int notificationId,
   })  : date = Value(date),
-        doctorId = Value(doctorId),
-        notificationId = Value(notificationId);
+        doctorId = Value(doctorId);
   static Insertable<Date> custom({
     Expression<int> id,
     Expression<DateTime> date,
     Expression<String> title,
     Expression<int> doctorId,
-    Expression<int> notificationId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (date != null) 'date': date,
       if (title != null) 'title': title,
       if (doctorId != null) 'doctor_id': doctorId,
-      if (notificationId != null) 'notification_id': notificationId,
     });
   }
 
@@ -1151,14 +1121,12 @@ class DatesCompanion extends UpdateCompanion<Date> {
       {Value<int> id,
       Value<DateTime> date,
       Value<String> title,
-      Value<int> doctorId,
-      Value<int> notificationId}) {
+      Value<int> doctorId}) {
     return DatesCompanion(
       id: id ?? this.id,
       date: date ?? this.date,
       title: title ?? this.title,
       doctorId: doctorId ?? this.doctorId,
-      notificationId: notificationId ?? this.notificationId,
     );
   }
 
@@ -1177,9 +1145,6 @@ class DatesCompanion extends UpdateCompanion<Date> {
     if (doctorId.present) {
       map['doctor_id'] = Variable<int>(doctorId.value);
     }
-    if (notificationId.present) {
-      map['notification_id'] = Variable<int>(notificationId.value);
-    }
     return map;
   }
 
@@ -1189,8 +1154,7 @@ class DatesCompanion extends UpdateCompanion<Date> {
           ..write('id: $id, ')
           ..write('date: $date, ')
           ..write('title: $title, ')
-          ..write('doctorId: $doctorId, ')
-          ..write('notificationId: $notificationId')
+          ..write('doctorId: $doctorId')
           ..write(')'))
         .toString();
   }
@@ -1245,23 +1209,8 @@ class $DatesTable extends Dates with TableInfo<$DatesTable, Date> {
     );
   }
 
-  final VerificationMeta _notificationIdMeta =
-      const VerificationMeta('notificationId');
-  GeneratedIntColumn _notificationId;
   @override
-  GeneratedIntColumn get notificationId =>
-      _notificationId ??= _constructNotificationId();
-  GeneratedIntColumn _constructNotificationId() {
-    return GeneratedIntColumn(
-      'notification_id',
-      $tableName,
-      false,
-    );
-  }
-
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, date, title, doctorId, notificationId];
+  List<GeneratedColumn> get $columns => [id, date, title, doctorId];
   @override
   $DatesTable get asDslTable => this;
   @override
@@ -1291,14 +1240,6 @@ class $DatesTable extends Dates with TableInfo<$DatesTable, Date> {
           doctorId.isAcceptableOrUnknown(data['doctor_id'], _doctorIdMeta));
     } else if (isInserting) {
       context.missing(_doctorIdMeta);
-    }
-    if (data.containsKey('notification_id')) {
-      context.handle(
-          _notificationIdMeta,
-          notificationId.isAcceptableOrUnknown(
-              data['notification_id'], _notificationIdMeta));
-    } else if (isInserting) {
-      context.missing(_notificationIdMeta);
     }
     return context;
   }

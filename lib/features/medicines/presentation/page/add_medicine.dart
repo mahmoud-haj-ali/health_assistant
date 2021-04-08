@@ -211,7 +211,14 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                                             onTap: amount == times.length?null:() async {
                                               final time = await showTimePicker(
                                                   context: context,
-                                                  initialTime: TimeOfDay.now());
+                                                  initialTime: TimeOfDay.now(),
+                                                  builder: (context,child){
+                                                    return Theme(
+                                                      data: ThemeData.light().copyWith(colorScheme: ColorScheme.light().copyWith(primary: Colors.teal)),
+                                                      child: child,
+                                                    );
+                                                  }
+                                              );
                                               if (time != null) {
                                                 state(() => times.add(time));
                                               }
@@ -248,8 +255,18 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                         return GestureDetector(
                           onTap: ()async{
                             range = await showDateRangePicker(context: context,
-                                firstDate: DateTime.now().subtract(Duration(days: 7)),
-                                lastDate: DateTime.now().add(Duration(days: 1000)));
+                              firstDate: DateTime.now().subtract(Duration(days: 7)),
+                              lastDate: DateTime.now().add(Duration(days: 1000)),
+                              builder: (context,child){
+                                return Theme(
+                                  data: ThemeData.light().copyWith(colorScheme: ColorScheme.light()
+                                      .copyWith(primary: Colors.teal),
+                                      primaryColor: Colors.teal
+                                  ),
+                                  child: child,
+                                );
+                              }
+                            );
                             state((){});
                           },
                           child: Container(

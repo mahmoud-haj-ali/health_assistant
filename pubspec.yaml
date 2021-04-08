@@ -40,6 +40,7 @@ dependencies:
   provider:
   flutter_local_notifications: ^4.0.1
   sizer: ^1.1.8
+  image_picker: ^0.7.4
 
 dev_dependencies:
   flutter_test:

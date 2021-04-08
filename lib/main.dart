@@ -23,7 +23,10 @@ class App extends StatelessWidget {
             SizerUtil().init(constraints, orientation);
             return MaterialApp(
                 title: "المساعد الصحي",
-                theme: ThemeData(fontFamily: "Tajawal", primaryColor: Colors.teal, accentColor: Colors.teal,appBarTheme: AppBarTheme(brightness: Brightness.dark)),
+                theme: ThemeData(fontFamily: "Tajawal",
+                    primaryColor: Colors.teal,
+                    accentColor: Colors.teal,
+                    appBarTheme: AppBarTheme(brightness: Brightness.dark)),
                 home: HomePage(),
                 debugShowCheckedModeBanner: false,
                 onGenerateRoute: GenerateScreen.onGenerate,

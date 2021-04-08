@@ -3,13 +3,20 @@ import 'package:flutter/material.dart';
 class AlertDeleteDialog extends StatelessWidget {
 
   final Function onDelete;
-
-  const AlertDeleteDialog({Key key, this.onDelete}) : super(key: key);
+  final String subtext;
+  const AlertDeleteDialog({Key key, this.onDelete, this.subtext}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: Text("هل أنت متأكد؟",style: TextStyle(fontWeight: FontWeight.bold),),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text("هل أنت متأكد؟",style: TextStyle(fontWeight: FontWeight.bold),),
+          if(subtext != null)
+            Text(subtext,style: TextStyle(fontWeight: FontWeight.bold),),
+        ],
+      ),
       actions: [
         RaisedButton(
           highlightElevation: 2,

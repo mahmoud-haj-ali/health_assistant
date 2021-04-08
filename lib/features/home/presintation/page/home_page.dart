@@ -78,17 +78,16 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         children: [
           Expanded(flex:1 , child: MainCard(text: "الأدوية",
-            onPressed: (){
-              Navigator.pushNamed(context, NameScreen.medicines_list_page);
-            },
-            imageName: "medicine.jpg",
-            color: Colors.red.shade900,)),
+            onPressed: () => Navigator.pushNamed(context, NameScreen.medicines_list_page),
+            imageName: "medicine.jpg", color: Colors.red.shade900,)),
           SizedBox(height: 2,),
-          Expanded(flex:1,child: MainCard(text: "الأطباء",onPressed: (){
-            Navigator.pushNamed(context, NameScreen.doctors_list_page);
-          },imageName: "doctors.jpg",color: Colors.lightBlue.shade900,)),
+          Expanded(flex:1,child: MainCard(text: "الأطباء",
+            onPressed: () => Navigator.pushNamed(context, NameScreen.doctors_list_page),
+            imageName: "doctors.jpg",color: Colors.lightBlue.shade900,)),
           Expanded(flex:1,child: MainCard(text: "الحميات",onPressed: (){},imageName: "diet.jpg",color: Colors.green.shade900,)),
-          Expanded(flex:1,child: MainCard(text: "التحاليل",onPressed: (){},imageName: "analysis.jpg",color: Colors.cyan.shade900,)),
+          Expanded(flex:1,child: MainCard(text: "التحاليل",
+            onPressed: ()=> Navigator.pushNamed(context, NameScreen.analysis_name_list_page),
+            imageName: "analysis.jpg",color: Colors.cyan.shade900,)),
         ],
       ),
     );

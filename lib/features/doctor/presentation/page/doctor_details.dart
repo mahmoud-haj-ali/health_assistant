@@ -66,13 +66,27 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime.now(),
-            lastDate: DateTime.now().add(Duration(days: 350)));
+            lastDate: DateTime.now().add(Duration(days: 350)),
+            builder: (context,child){
+              return Theme(
+                data: ThemeData.light().copyWith(colorScheme: ColorScheme.light().copyWith(primary: Colors.teal)),
+                child: child,
+              );
+            }
+        );
         TimeOfDay t = await showTimePicker(
             context: context,
-            initialTime: TimeOfDay.now());
+            initialTime: TimeOfDay.now(),
+            builder: (context,child){
+              return Theme(
+                data: ThemeData.light().copyWith(colorScheme: ColorScheme.light().copyWith(primary: Colors.teal)),
+                child: child,
+              );
+            }
+        );
         if(d != null && t != null) {
           DateTime date = DateTime(d.year,d.month,d.day,t.hour,t.minute);
-          db.addDate(Date(date: date, doctorId: doctor.id));
+          db.addDate(Date(date: date, doctorId: doctor.id,title: 'لديك موعد عند الطبيب ${doctor.name}'));
         }
       },
     );

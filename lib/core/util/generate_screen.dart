@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:haelth_app/core/data_base/tables/analysis_name_t.dart';
+import 'package:haelth_app/features/analysis/add_analysis_page.dart';
+import 'package:haelth_app/features/analysis/analysis_dates_page.dart';
+import 'package:haelth_app/features/analysis/analysis_details_page.dart';
+import 'package:haelth_app/features/analysis/analysis_names_page.dart';
 import 'package:haelth_app/features/doctor/presentation/page/doctor_details.dart';
 import 'package:haelth_app/features/doctors/presentation/page/doctors_list.dart';
 import 'package:haelth_app/features/medicines/presentation/page/add_medicine.dart';
@@ -31,6 +36,22 @@ class GenerateScreen {
       case NameScreen.medicine_details_page:
         {
           return CupertinoPageRoute(builder: (context) => MedicineDetails(m: args,));
+        }
+      case NameScreen.analysis_name_list_page:
+        {
+          return CupertinoPageRoute(builder: (context) => AnalysisNamesPage());
+        }
+      case NameScreen.analysis_dates_list_page:
+        {
+          return CupertinoPageRoute(builder: (context) => AnalysisDatesPage(name: args,));
+        }
+      case NameScreen.add_analysis_page:
+        {
+          return CupertinoPageRoute(builder: (context) => AddAnalysisPage());
+        }
+      case NameScreen.analysis_details_page:
+        {
+          return CupertinoPageRoute(builder: (context) => AnalysisDetailsPage(analysis: args,));
         }
 
       default:
@@ -69,6 +90,14 @@ class NameScreen {
   static const String medicine_details_page = "/medicine_details_page";
 
   static const String add_medicine_page = "/add_medicine_page";
+
+  static const String analysis_name_list_page = "/analysis_name_list_page";
+
+  static const String analysis_dates_list_page = "/analysis_dates_list_page";
+
+  static const String add_analysis_page = "/add_analysis_page";
+
+  static const String analysis_details_page = "/analysis_details_page";
 
 
 }

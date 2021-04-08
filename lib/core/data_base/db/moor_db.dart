@@ -28,7 +28,7 @@ class MyDatabase extends _$MyDatabase {
   Future<List<AnalysisName>> get getAllAnalysisNames => select(analysisNames).get();
   Future<List<Diet>> get getAllDiets => select(diets).get();
   Future<List<Medicine>> get getAllMedicines => select(medicines).get();
-
+  Future<List<Analysis>> getAllAnalysis(int nameId) => (select(analysises)..where((tbl) => tbl.nameId.equals(nameId))).get();
   Future<List<MedicineReminder>> getMedicineReminders(medicineId) => (select(medicineReminders)..where((tbl) => tbl.medicineId.equals(medicineId))).get();
 
   Stream<List<Doctor>> get watchAllDoctors => select(doctors).watch();
@@ -38,7 +38,6 @@ class MyDatabase extends _$MyDatabase {
 
   Stream<List<Doctor>> watchDoctor(int doctorId) => (select(doctors)..where((t) => t.id.equals(doctorId))).watch();
   Stream<Medicine> watchMedicine(int medicineId) => (select(medicines)..where((t) => t.id.equals(medicineId))).watchSingle();
-
   Stream<List<Medicine>> watchAllDietMedicines(int dietId) => (select(medicines)..where((t) => t.dietId.equals(dietId))).watch();
   Stream<List<Food>> watchAllDietFoods(int dietId) => (select(foods)..where((t) => t.dietId.equals(dietId))).watch();
   Stream<List<Analysis>> watchAllAnalysis(int analysisNameId) => (select(analysises)..where((t) => t.nameId.equals(analysisNameId))).watch();
@@ -53,7 +52,10 @@ class MyDatabase extends _$MyDatabase {
   }
   Future deleteDiet(int id) => (delete(diets)..where((t)=>t.id.equals(id))).go();
   Future deleteFood(int id) => (delete(foods)..where((t)=>t.id.equals(id))).go();
-  Future deleteAnalysisName(int id) => (delete(analysisNames)..where((t)=>t.id.equals(id))).go();
+  Future deleteAnalysisName(int id) async{
+    await (delete(analysisNames)..where((t)=>t.id.equals(id))).go();
+    (delete(analysises)..where((tbl) => tbl.nameId.equals(id))).go();
+  }
   Future deleteAnalysis(int id) => (delete(analysises)..where((t)=>t.id.equals(id))).go();
   Future deleteMedicineReminder(int id) => (delete(medicineReminders)..where((t)=>t.id.equals(id))).go();
   Future deleteMedicineReminders(int medicineId) => (delete(medicineReminders)..where((t)=>t.medicineId.equals(medicineId))).go();

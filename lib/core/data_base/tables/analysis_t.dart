@@ -4,15 +4,14 @@ import 'package:moor/moor.dart';
 class Analysises extends Table {
 
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get name => text()();
   TextColumn get image => text().nullable()();
-  IntColumn get value => integer().nullable()();
+  TextColumn get name => text().nullable()();
+  TextColumn get value => text()();
   TextColumn get notes => text().nullable()();
   DateTimeColumn get lastDate => dateTime()();
   IntColumn get nameId => integer()();
 
   @override
   Set<Column> get primaryKey => {id};
-
 
 }

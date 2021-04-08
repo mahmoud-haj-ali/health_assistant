@@ -5,7 +5,6 @@ class Dates extends Table {
   DateTimeColumn get date => dateTime()();
   TextColumn get title => text().nullable()();
   IntColumn get doctorId => integer()();
-  IntColumn get notificationId => integer()();
 
   @override
   Set<Column> get primaryKey => {id};

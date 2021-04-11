@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:haelth_app/core/util/photo_view_page.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
@@ -23,17 +25,22 @@ class AnalysisDetailsPage extends StatelessWidget {
                height: 25.0.h,
                width: double.infinity,
                color: Colors.grey[300],
-               child: Image.memory(File(analysis.image).readAsBytesSync(),fit: BoxFit.cover,
-                 frameBuilder: (context,child,frame,wasSynchronouslyLoaded){
-                 return Stack(
-                   fit: StackFit.expand,
-                   children: [
-                     if(frame == null)
-                     Center(child: CircularProgressIndicator(),),
-                     child
-                   ],
-                 );
-                 },)),
+               child: GestureDetector(
+                 onTap: () => Navigator.of(context).push(
+                     CupertinoPageRoute(builder: (context) =>
+                         SinglePhotoViewPage(image: analysis.image,))),
+                 child: Image.memory(File(analysis.image).readAsBytesSync(),fit: BoxFit.cover,
+                   frameBuilder: (context,child,frame,wasSynchronouslyLoaded){
+                   return Stack(
+                     fit: StackFit.expand,
+                     children: [
+                       if(frame == null)
+                       Center(child: CircularProgressIndicator(),),
+                       child
+                     ],
+                   );
+                   },),
+               )),
           SizedBox(
             height: 25.0.h,
             child: Row(

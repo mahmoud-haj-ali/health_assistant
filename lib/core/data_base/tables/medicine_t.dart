@@ -5,7 +5,7 @@ class Medicines extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
   TextColumn get unit => text()();
-  TextColumn get notes => text().withDefault(const Constant("غير محدد"))();
+  TextColumn get notes => text().withDefault(Constant("غير محدد"))();
   IntColumn get repeat => integer()();
   IntColumn get dietId => integer().nullable()();
   DateTimeColumn get startDate => dateTime().clientDefault(() => DateTime.now())();

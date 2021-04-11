@@ -33,7 +33,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
       notes = widget.medicine.notes;
       unit = widget.medicine.unit;
       isAfter = widget.medicine.isAfter;
-      if(widget.medicine.startDate != null){
+      if(widget.medicine.startDate != null && widget.medicine.endDate != null){
         range = DateTimeRange(start: widget.medicine.startDate, end: widget.medicine.endDate);
       }
     }

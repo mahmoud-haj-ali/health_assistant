@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:haelth_app/core/data_base/db/moor_db.dart';
+import 'package:haelth_app/core/notifications/notifications_servece.dart';
 import 'package:haelth_app/main.dart';
 
 class AddMedicineController{
@@ -21,9 +22,10 @@ class AddMedicineController{
         await db.deleteMedicineReminders(id);
       }
       await Future.forEach(times, (time) async{
-        await db.addMedicineReminder(
+        int mId = await db.addMedicineReminder(
             MedicineReminder(medicineId: id, date: DateTime(0,0,0,time.hour,time.minute),
                 content: 'يرجى اخذ $unit $name ${isAfter?'بعد الطعام':'قبل الطعام'}'));
+        localNotification.scheduleDailyNotification(id: mId,time: DateTime(0,0,0,time.hour,time.minute),title: 'تذكر',body: 'يرجى اخذ $unit $name ${isAfter?'بعد الطعام':'قبل الطعام'}');
       });
       return true;
     }  catch (e) {

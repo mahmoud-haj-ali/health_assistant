@@ -5,6 +5,8 @@ import 'package:haelth_app/features/analysis/add_analysis_page.dart';
 import 'package:haelth_app/features/analysis/analysis_dates_page.dart';
 import 'package:haelth_app/features/analysis/analysis_details_page.dart';
 import 'package:haelth_app/features/analysis/analysis_names_page.dart';
+import 'package:haelth_app/features/diet/add_diet_page.dart';
+import 'package:haelth_app/features/diet/diet_list_page.dart';
 import 'package:haelth_app/features/doctor/presentation/page/doctor_details.dart';
 import 'package:haelth_app/features/doctors/presentation/page/doctors_list.dart';
 import 'package:haelth_app/features/medicines/presentation/page/add_medicine.dart';
@@ -53,6 +55,14 @@ class GenerateScreen {
         {
           return CupertinoPageRoute(builder: (context) => AnalysisDetailsPage(analysis: args,));
         }
+      case NameScreen.add_diet_page:
+        {
+          return CupertinoPageRoute(builder: (context) => AddDietPage());
+        }
+      case NameScreen.diet_list_page:
+        {
+          return CupertinoPageRoute(builder: (context) => DietListPage());
+        }
 
       default:
         return _errorRoute();
@@ -98,6 +108,10 @@ class NameScreen {
   static const String add_analysis_page = "/add_analysis_page";
 
   static const String analysis_details_page = "/analysis_details_page";
+
+  static const String add_diet_page = "/add_diet_page";
+
+  static const String diet_list_page = "/diet_list_page";
 
 
 }

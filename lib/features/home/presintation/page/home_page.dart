@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:haelth_app/core/notifications/notifications_servece.dart';
 import 'package:haelth_app/core/util/generate_screen.dart';
 import 'package:haelth_app/features/home/presintation/widget/main_card.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,9 +11,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey.shade200,
       primary: true,
       body: body(),
@@ -84,7 +88,9 @@ class _HomePageState extends State<HomePage> {
           Expanded(flex:1,child: MainCard(text: "الأطباء",
             onPressed: () => Navigator.pushNamed(context, NameScreen.doctors_list_page),
             imageName: "doctors.jpg",color: Colors.lightBlue.shade900,)),
-          Expanded(flex:1,child: MainCard(text: "الحميات",onPressed: (){},imageName: "diet.jpg",color: Colors.green.shade900,)),
+          Expanded(flex:1,child: MainCard(text: "الحميات",
+            onPressed: ()=> Navigator.pushNamed(context, NameScreen.diet_list_page),
+            imageName: "diet.jpg",color: Colors.green.shade900,)),
           Expanded(flex:1,child: MainCard(text: "التحاليل",
             onPressed: ()=> Navigator.pushNamed(context, NameScreen.analysis_name_list_page),
             imageName: "analysis.jpg",color: Colors.cyan.shade900,)),

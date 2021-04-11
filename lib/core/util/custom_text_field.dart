@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
 
   final Function onChanged;
+  final Function onSubmitted;
   final TextInputAction textInputAction;
   final String labelText;
   final String initialValue;
@@ -36,7 +37,8 @@ class CustomTextField extends StatelessWidget {
     this.minLines,
     this.height,
     this.color,
-    this.radius = 10
+    this.radius = 10,
+    this.onSubmitted
   }) : super(key: key);
 
   @override
@@ -51,6 +53,7 @@ class CustomTextField extends StatelessWidget {
         ),
         child: TextFormField(
           onChanged: onChanged,
+          onFieldSubmitted: onSubmitted,
           controller: controller,
           textInputAction: textInputAction,
           keyboardType: keyboardType,

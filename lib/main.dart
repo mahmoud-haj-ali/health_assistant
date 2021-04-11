@@ -10,6 +10,7 @@ final db = MyDatabase();
 
 void main() {
   runApp(App());
+
 }
 
 class App extends StatelessWidget {

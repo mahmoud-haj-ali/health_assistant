@@ -1261,13 +1261,17 @@ class $DatesTable extends Dates with TableInfo<$DatesTable, Date> {
 class Diet extends DataClass implements Insertable<Diet> {
   final int id;
   final String name;
+  final String allowedFood;
+  final String preventFood;
   final String description;
   final DateTime startDate;
   final DateTime endDate;
   Diet(
       {@required this.id,
       @required this.name,
-      this.description,
+      this.allowedFood,
+      this.preventFood,
+      @required this.description,
       @required this.startDate,
       @required this.endDate});
   factory Diet.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -1279,6 +1283,10 @@ class Diet extends DataClass implements Insertable<Diet> {
     return Diet(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      allowedFood: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}allowed_food']),
+      preventFood: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}prevent_food']),
       description: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}description']),
       startDate: dateTimeType
@@ -1296,6 +1304,12 @@ class Diet extends DataClass implements Insertable<Diet> {
     if (!nullToAbsent || name != null) {
       map['name'] = Variable<String>(name);
     }
+    if (!nullToAbsent || allowedFood != null) {
+      map['allowed_food'] = Variable<String>(allowedFood);
+    }
+    if (!nullToAbsent || preventFood != null) {
+      map['prevent_food'] = Variable<String>(preventFood);
+    }
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
@@ -1312,6 +1326,12 @@ class Diet extends DataClass implements Insertable<Diet> {
     return DietsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      allowedFood: allowedFood == null && nullToAbsent
+          ? const Value.absent()
+          : Value(allowedFood),
+      preventFood: preventFood == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preventFood),
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
@@ -1330,6 +1350,8 @@ class Diet extends DataClass implements Insertable<Diet> {
     return Diet(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      allowedFood: serializer.fromJson<String>(json['allowedFood']),
+      preventFood: serializer.fromJson<String>(json['preventFood']),
       description: serializer.fromJson<String>(json['description']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
       endDate: serializer.fromJson<DateTime>(json['endDate']),
@@ -1341,6 +1363,8 @@ class Diet extends DataClass implements Insertable<Diet> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
+      'allowedFood': serializer.toJson<String>(allowedFood),
+      'preventFood': serializer.toJson<String>(preventFood),
       'description': serializer.toJson<String>(description),
       'startDate': serializer.toJson<DateTime>(startDate),
       'endDate': serializer.toJson<DateTime>(endDate),
@@ -1350,12 +1374,16 @@ class Diet extends DataClass implements Insertable<Diet> {
   Diet copyWith(
           {int id,
           String name,
+          String allowedFood,
+          String preventFood,
           String description,
           DateTime startDate,
           DateTime endDate}) =>
       Diet(
         id: id ?? this.id,
         name: name ?? this.name,
+        allowedFood: allowedFood ?? this.allowedFood,
+        preventFood: preventFood ?? this.preventFood,
         description: description ?? this.description,
         startDate: startDate ?? this.startDate,
         endDate: endDate ?? this.endDate,
@@ -1365,6 +1393,8 @@ class Diet extends DataClass implements Insertable<Diet> {
     return (StringBuffer('Diet(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('allowedFood: $allowedFood, ')
+          ..write('preventFood: $preventFood, ')
           ..write('description: $description, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate')
@@ -1377,14 +1407,20 @@ class Diet extends DataClass implements Insertable<Diet> {
       id.hashCode,
       $mrjc(
           name.hashCode,
-          $mrjc(description.hashCode,
-              $mrjc(startDate.hashCode, endDate.hashCode)))));
+          $mrjc(
+              allowedFood.hashCode,
+              $mrjc(
+                  preventFood.hashCode,
+                  $mrjc(description.hashCode,
+                      $mrjc(startDate.hashCode, endDate.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Diet &&
           other.id == this.id &&
           other.name == this.name &&
+          other.allowedFood == this.allowedFood &&
+          other.preventFood == this.preventFood &&
           other.description == this.description &&
           other.startDate == this.startDate &&
           other.endDate == this.endDate);
@@ -1393,12 +1429,16 @@ class Diet extends DataClass implements Insertable<Diet> {
 class DietsCompanion extends UpdateCompanion<Diet> {
   final Value<int> id;
   final Value<String> name;
+  final Value<String> allowedFood;
+  final Value<String> preventFood;
   final Value<String> description;
   final Value<DateTime> startDate;
   final Value<DateTime> endDate;
   const DietsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.allowedFood = const Value.absent(),
+    this.preventFood = const Value.absent(),
     this.description = const Value.absent(),
     this.startDate = const Value.absent(),
     this.endDate = const Value.absent(),
@@ -1406,6 +1446,8 @@ class DietsCompanion extends UpdateCompanion<Diet> {
   DietsCompanion.insert({
     this.id = const Value.absent(),
     @required String name,
+    this.allowedFood = const Value.absent(),
+    this.preventFood = const Value.absent(),
     this.description = const Value.absent(),
     this.startDate = const Value.absent(),
     @required DateTime endDate,
@@ -1414,6 +1456,8 @@ class DietsCompanion extends UpdateCompanion<Diet> {
   static Insertable<Diet> custom({
     Expression<int> id,
     Expression<String> name,
+    Expression<String> allowedFood,
+    Expression<String> preventFood,
     Expression<String> description,
     Expression<DateTime> startDate,
     Expression<DateTime> endDate,
@@ -1421,6 +1465,8 @@ class DietsCompanion extends UpdateCompanion<Diet> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
+      if (allowedFood != null) 'allowed_food': allowedFood,
+      if (preventFood != null) 'prevent_food': preventFood,
       if (description != null) 'description': description,
       if (startDate != null) 'start_date': startDate,
       if (endDate != null) 'end_date': endDate,
@@ -1430,12 +1476,16 @@ class DietsCompanion extends UpdateCompanion<Diet> {
   DietsCompanion copyWith(
       {Value<int> id,
       Value<String> name,
+      Value<String> allowedFood,
+      Value<String> preventFood,
       Value<String> description,
       Value<DateTime> startDate,
       Value<DateTime> endDate}) {
     return DietsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      allowedFood: allowedFood ?? this.allowedFood,
+      preventFood: preventFood ?? this.preventFood,
       description: description ?? this.description,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -1450,6 +1500,12 @@ class DietsCompanion extends UpdateCompanion<Diet> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (allowedFood.present) {
+      map['allowed_food'] = Variable<String>(allowedFood.value);
+    }
+    if (preventFood.present) {
+      map['prevent_food'] = Variable<String>(preventFood.value);
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
@@ -1468,6 +1524,8 @@ class DietsCompanion extends UpdateCompanion<Diet> {
     return (StringBuffer('DietsCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('allowedFood: $allowedFood, ')
+          ..write('preventFood: $preventFood, ')
           ..write('description: $description, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate')
@@ -1501,6 +1559,34 @@ class $DietsTable extends Diets with TableInfo<$DietsTable, Diet> {
     );
   }
 
+  final VerificationMeta _allowedFoodMeta =
+      const VerificationMeta('allowedFood');
+  GeneratedTextColumn _allowedFood;
+  @override
+  GeneratedTextColumn get allowedFood =>
+      _allowedFood ??= _constructAllowedFood();
+  GeneratedTextColumn _constructAllowedFood() {
+    return GeneratedTextColumn(
+      'allowed_food',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _preventFoodMeta =
+      const VerificationMeta('preventFood');
+  GeneratedTextColumn _preventFood;
+  @override
+  GeneratedTextColumn get preventFood =>
+      _preventFood ??= _constructPreventFood();
+  GeneratedTextColumn _constructPreventFood() {
+    return GeneratedTextColumn(
+      'prevent_food',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _descriptionMeta =
       const VerificationMeta('description');
   GeneratedTextColumn _description;
@@ -1508,11 +1594,8 @@ class $DietsTable extends Diets with TableInfo<$DietsTable, Diet> {
   GeneratedTextColumn get description =>
       _description ??= _constructDescription();
   GeneratedTextColumn _constructDescription() {
-    return GeneratedTextColumn(
-      'description',
-      $tableName,
-      true,
-    );
+    return GeneratedTextColumn('description', $tableName, false,
+        defaultValue: Constant('لايوجد وصف'));
   }
 
   final VerificationMeta _startDateMeta = const VerificationMeta('startDate');
@@ -1541,7 +1624,7 @@ class $DietsTable extends Diets with TableInfo<$DietsTable, Diet> {
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, description, startDate, endDate];
+      [id, name, allowedFood, preventFood, description, startDate, endDate];
   @override
   $DietsTable get asDslTable => this;
   @override
@@ -1561,6 +1644,18 @@ class $DietsTable extends Diets with TableInfo<$DietsTable, Diet> {
           _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('allowed_food')) {
+      context.handle(
+          _allowedFoodMeta,
+          allowedFood.isAcceptableOrUnknown(
+              data['allowed_food'], _allowedFoodMeta));
+    }
+    if (data.containsKey('prevent_food')) {
+      context.handle(
+          _preventFoodMeta,
+          preventFood.isAcceptableOrUnknown(
+              data['prevent_food'], _preventFoodMeta));
     }
     if (data.containsKey('description')) {
       context.handle(
@@ -1592,288 +1687,6 @@ class $DietsTable extends Diets with TableInfo<$DietsTable, Diet> {
   @override
   $DietsTable createAlias(String alias) {
     return $DietsTable(_db, alias);
-  }
-}
-
-class Food extends DataClass implements Insertable<Food> {
-  final int id;
-  final String name;
-  final bool isAllowed;
-  final int dietId;
-  Food(
-      {@required this.id,
-      @required this.name,
-      @required this.isAllowed,
-      @required this.dietId});
-  factory Food.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
-    return Food(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      isAllowed: boolType
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_allowed']),
-      dietId:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}diet_id']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
-    if (!nullToAbsent || isAllowed != null) {
-      map['is_allowed'] = Variable<bool>(isAllowed);
-    }
-    if (!nullToAbsent || dietId != null) {
-      map['diet_id'] = Variable<int>(dietId);
-    }
-    return map;
-  }
-
-  FoodsCompanion toCompanion(bool nullToAbsent) {
-    return FoodsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      isAllowed: isAllowed == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isAllowed),
-      dietId:
-          dietId == null && nullToAbsent ? const Value.absent() : Value(dietId),
-    );
-  }
-
-  factory Food.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Food(
-      id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
-      isAllowed: serializer.fromJson<bool>(json['isAllowed']),
-      dietId: serializer.fromJson<int>(json['dietId']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
-      'isAllowed': serializer.toJson<bool>(isAllowed),
-      'dietId': serializer.toJson<int>(dietId),
-    };
-  }
-
-  Food copyWith({int id, String name, bool isAllowed, int dietId}) => Food(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        isAllowed: isAllowed ?? this.isAllowed,
-        dietId: dietId ?? this.dietId,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('Food(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('isAllowed: $isAllowed, ')
-          ..write('dietId: $dietId')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(name.hashCode, $mrjc(isAllowed.hashCode, dietId.hashCode))));
-  @override
-  bool operator ==(dynamic other) =>
-      identical(this, other) ||
-      (other is Food &&
-          other.id == this.id &&
-          other.name == this.name &&
-          other.isAllowed == this.isAllowed &&
-          other.dietId == this.dietId);
-}
-
-class FoodsCompanion extends UpdateCompanion<Food> {
-  final Value<int> id;
-  final Value<String> name;
-  final Value<bool> isAllowed;
-  final Value<int> dietId;
-  const FoodsCompanion({
-    this.id = const Value.absent(),
-    this.name = const Value.absent(),
-    this.isAllowed = const Value.absent(),
-    this.dietId = const Value.absent(),
-  });
-  FoodsCompanion.insert({
-    this.id = const Value.absent(),
-    @required String name,
-    @required bool isAllowed,
-    @required int dietId,
-  })  : name = Value(name),
-        isAllowed = Value(isAllowed),
-        dietId = Value(dietId);
-  static Insertable<Food> custom({
-    Expression<int> id,
-    Expression<String> name,
-    Expression<bool> isAllowed,
-    Expression<int> dietId,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (name != null) 'name': name,
-      if (isAllowed != null) 'is_allowed': isAllowed,
-      if (dietId != null) 'diet_id': dietId,
-    });
-  }
-
-  FoodsCompanion copyWith(
-      {Value<int> id,
-      Value<String> name,
-      Value<bool> isAllowed,
-      Value<int> dietId}) {
-    return FoodsCompanion(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      isAllowed: isAllowed ?? this.isAllowed,
-      dietId: dietId ?? this.dietId,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (isAllowed.present) {
-      map['is_allowed'] = Variable<bool>(isAllowed.value);
-    }
-    if (dietId.present) {
-      map['diet_id'] = Variable<int>(dietId.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('FoodsCompanion(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('isAllowed: $isAllowed, ')
-          ..write('dietId: $dietId')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $FoodsTable extends Foods with TableInfo<$FoodsTable, Food> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $FoodsTable(this._db, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
-  @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn(
-      'name',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _isAllowedMeta = const VerificationMeta('isAllowed');
-  GeneratedBoolColumn _isAllowed;
-  @override
-  GeneratedBoolColumn get isAllowed => _isAllowed ??= _constructIsAllowed();
-  GeneratedBoolColumn _constructIsAllowed() {
-    return GeneratedBoolColumn(
-      'is_allowed',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _dietIdMeta = const VerificationMeta('dietId');
-  GeneratedIntColumn _dietId;
-  @override
-  GeneratedIntColumn get dietId => _dietId ??= _constructDietId();
-  GeneratedIntColumn _constructDietId() {
-    return GeneratedIntColumn(
-      'diet_id',
-      $tableName,
-      false,
-    );
-  }
-
-  @override
-  List<GeneratedColumn> get $columns => [id, name, isAllowed, dietId];
-  @override
-  $FoodsTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'foods';
-  @override
-  final String actualTableName = 'foods';
-  @override
-  VerificationContext validateIntegrity(Insertable<Food> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('is_allowed')) {
-      context.handle(_isAllowedMeta,
-          isAllowed.isAcceptableOrUnknown(data['is_allowed'], _isAllowedMeta));
-    } else if (isInserting) {
-      context.missing(_isAllowedMeta);
-    }
-    if (data.containsKey('diet_id')) {
-      context.handle(_dietIdMeta,
-          dietId.isAcceptableOrUnknown(data['diet_id'], _dietIdMeta));
-    } else if (isInserting) {
-      context.missing(_dietIdMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Food map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Food.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  $FoodsTable createAlias(String alias) {
-    return $FoodsTable(_db, alias);
   }
 }
 
@@ -2251,7 +2064,7 @@ class $MedicinesTable extends Medicines
   GeneratedTextColumn get notes => _notes ??= _constructNotes();
   GeneratedTextColumn _constructNotes() {
     return GeneratedTextColumn('notes', $tableName, false,
-        defaultValue: const Constant("غير محدد"));
+        defaultValue: Constant("غير محدد"));
   }
 
   final VerificationMeta _repeatMeta = const VerificationMeta('repeat');
@@ -2679,6 +2492,294 @@ class $MedicineRemindersTable extends MedicineReminders
   }
 }
 
+class MedicineDiet extends DataClass implements Insertable<MedicineDiet> {
+  final int id;
+  final int medicineId;
+  final int dietId;
+  final bool isAllowed;
+  MedicineDiet(
+      {@required this.id,
+      @required this.medicineId,
+      @required this.dietId,
+      @required this.isAllowed});
+  factory MedicineDiet.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final boolType = db.typeSystem.forDartType<bool>();
+    return MedicineDiet(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      medicineId: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}medicine_id']),
+      dietId:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}diet_id']),
+      isAllowed: boolType
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_allowed']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || medicineId != null) {
+      map['medicine_id'] = Variable<int>(medicineId);
+    }
+    if (!nullToAbsent || dietId != null) {
+      map['diet_id'] = Variable<int>(dietId);
+    }
+    if (!nullToAbsent || isAllowed != null) {
+      map['is_allowed'] = Variable<bool>(isAllowed);
+    }
+    return map;
+  }
+
+  MedicineDietsCompanion toCompanion(bool nullToAbsent) {
+    return MedicineDietsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      medicineId: medicineId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(medicineId),
+      dietId:
+          dietId == null && nullToAbsent ? const Value.absent() : Value(dietId),
+      isAllowed: isAllowed == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isAllowed),
+    );
+  }
+
+  factory MedicineDiet.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MedicineDiet(
+      id: serializer.fromJson<int>(json['id']),
+      medicineId: serializer.fromJson<int>(json['medicineId']),
+      dietId: serializer.fromJson<int>(json['dietId']),
+      isAllowed: serializer.fromJson<bool>(json['isAllowed']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'medicineId': serializer.toJson<int>(medicineId),
+      'dietId': serializer.toJson<int>(dietId),
+      'isAllowed': serializer.toJson<bool>(isAllowed),
+    };
+  }
+
+  MedicineDiet copyWith({int id, int medicineId, int dietId, bool isAllowed}) =>
+      MedicineDiet(
+        id: id ?? this.id,
+        medicineId: medicineId ?? this.medicineId,
+        dietId: dietId ?? this.dietId,
+        isAllowed: isAllowed ?? this.isAllowed,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MedicineDiet(')
+          ..write('id: $id, ')
+          ..write('medicineId: $medicineId, ')
+          ..write('dietId: $dietId, ')
+          ..write('isAllowed: $isAllowed')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(id.hashCode,
+      $mrjc(medicineId.hashCode, $mrjc(dietId.hashCode, isAllowed.hashCode))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is MedicineDiet &&
+          other.id == this.id &&
+          other.medicineId == this.medicineId &&
+          other.dietId == this.dietId &&
+          other.isAllowed == this.isAllowed);
+}
+
+class MedicineDietsCompanion extends UpdateCompanion<MedicineDiet> {
+  final Value<int> id;
+  final Value<int> medicineId;
+  final Value<int> dietId;
+  final Value<bool> isAllowed;
+  const MedicineDietsCompanion({
+    this.id = const Value.absent(),
+    this.medicineId = const Value.absent(),
+    this.dietId = const Value.absent(),
+    this.isAllowed = const Value.absent(),
+  });
+  MedicineDietsCompanion.insert({
+    this.id = const Value.absent(),
+    @required int medicineId,
+    @required int dietId,
+    @required bool isAllowed,
+  })  : medicineId = Value(medicineId),
+        dietId = Value(dietId),
+        isAllowed = Value(isAllowed);
+  static Insertable<MedicineDiet> custom({
+    Expression<int> id,
+    Expression<int> medicineId,
+    Expression<int> dietId,
+    Expression<bool> isAllowed,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (medicineId != null) 'medicine_id': medicineId,
+      if (dietId != null) 'diet_id': dietId,
+      if (isAllowed != null) 'is_allowed': isAllowed,
+    });
+  }
+
+  MedicineDietsCompanion copyWith(
+      {Value<int> id,
+      Value<int> medicineId,
+      Value<int> dietId,
+      Value<bool> isAllowed}) {
+    return MedicineDietsCompanion(
+      id: id ?? this.id,
+      medicineId: medicineId ?? this.medicineId,
+      dietId: dietId ?? this.dietId,
+      isAllowed: isAllowed ?? this.isAllowed,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (medicineId.present) {
+      map['medicine_id'] = Variable<int>(medicineId.value);
+    }
+    if (dietId.present) {
+      map['diet_id'] = Variable<int>(dietId.value);
+    }
+    if (isAllowed.present) {
+      map['is_allowed'] = Variable<bool>(isAllowed.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MedicineDietsCompanion(')
+          ..write('id: $id, ')
+          ..write('medicineId: $medicineId, ')
+          ..write('dietId: $dietId, ')
+          ..write('isAllowed: $isAllowed')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MedicineDietsTable extends MedicineDiets
+    with TableInfo<$MedicineDietsTable, MedicineDiet> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $MedicineDietsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _medicineIdMeta = const VerificationMeta('medicineId');
+  GeneratedIntColumn _medicineId;
+  @override
+  GeneratedIntColumn get medicineId => _medicineId ??= _constructMedicineId();
+  GeneratedIntColumn _constructMedicineId() {
+    return GeneratedIntColumn(
+      'medicine_id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _dietIdMeta = const VerificationMeta('dietId');
+  GeneratedIntColumn _dietId;
+  @override
+  GeneratedIntColumn get dietId => _dietId ??= _constructDietId();
+  GeneratedIntColumn _constructDietId() {
+    return GeneratedIntColumn(
+      'diet_id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _isAllowedMeta = const VerificationMeta('isAllowed');
+  GeneratedBoolColumn _isAllowed;
+  @override
+  GeneratedBoolColumn get isAllowed => _isAllowed ??= _constructIsAllowed();
+  GeneratedBoolColumn _constructIsAllowed() {
+    return GeneratedBoolColumn(
+      'is_allowed',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, medicineId, dietId, isAllowed];
+  @override
+  $MedicineDietsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'medicine_diets';
+  @override
+  final String actualTableName = 'medicine_diets';
+  @override
+  VerificationContext validateIntegrity(Insertable<MedicineDiet> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('medicine_id')) {
+      context.handle(
+          _medicineIdMeta,
+          medicineId.isAcceptableOrUnknown(
+              data['medicine_id'], _medicineIdMeta));
+    } else if (isInserting) {
+      context.missing(_medicineIdMeta);
+    }
+    if (data.containsKey('diet_id')) {
+      context.handle(_dietIdMeta,
+          dietId.isAcceptableOrUnknown(data['diet_id'], _dietIdMeta));
+    } else if (isInserting) {
+      context.missing(_dietIdMeta);
+    }
+    if (data.containsKey('is_allowed')) {
+      context.handle(_isAllowedMeta,
+          isAllowed.isAcceptableOrUnknown(data['is_allowed'], _isAllowedMeta));
+    } else if (isInserting) {
+      context.missing(_isAllowedMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MedicineDiet map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return MedicineDiet.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $MedicineDietsTable createAlias(String alias) {
+    return $MedicineDietsTable(_db, alias);
+  }
+}
+
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $DoctorsTable _doctors;
@@ -2692,13 +2793,14 @@ abstract class _$MyDatabase extends GeneratedDatabase {
   $DatesTable get dates => _dates ??= $DatesTable(this);
   $DietsTable _diets;
   $DietsTable get diets => _diets ??= $DietsTable(this);
-  $FoodsTable _foods;
-  $FoodsTable get foods => _foods ??= $FoodsTable(this);
   $MedicinesTable _medicines;
   $MedicinesTable get medicines => _medicines ??= $MedicinesTable(this);
   $MedicineRemindersTable _medicineReminders;
   $MedicineRemindersTable get medicineReminders =>
       _medicineReminders ??= $MedicineRemindersTable(this);
+  $MedicineDietsTable _medicineDiets;
+  $MedicineDietsTable get medicineDiets =>
+      _medicineDiets ??= $MedicineDietsTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -2708,8 +2810,8 @@ abstract class _$MyDatabase extends GeneratedDatabase {
         analysises,
         dates,
         diets,
-        foods,
         medicines,
-        medicineReminders
+        medicineReminders,
+        medicineDiets
       ];
 }

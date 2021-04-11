@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haelth_app/core/data_base/db/moor_db.dart';
+import 'package:haelth_app/core/notifications/notifications_servece.dart';
 import 'package:haelth_app/features/doctor/controller/doctor_controller.dart';
 import 'package:haelth_app/features/doctor/controller/doctor_state.dart';
 import 'package:haelth_app/features/doctor/presentation/widget/details.dart';
@@ -86,7 +87,8 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
         );
         if(d != null && t != null) {
           DateTime date = DateTime(d.year,d.month,d.day,t.hour,t.minute);
-          db.addDate(Date(date: date, doctorId: doctor.id,title: 'لديك موعد عند الطبيب ${doctor.name}'));
+          int id = await db.addDate(Date(date: date, doctorId: doctor.id,title: 'لديك موعد عند الطبيب ${doctor.name}'));
+          localNotification.scheduleNotification(id: id,body: 'لديك موعد عند الطبيب ${doctor.name}',title: 'تذكر',time: date);
         }
       },
     );

@@ -21,11 +21,11 @@ class AddMedicineController{
         await db.updateMedicine(medicine);
         await db.deleteMedicineReminders(id);
       }
-      await Future.forEach(times, (time) async{
-        int mId = await db.addMedicineReminder(
-            MedicineReminder(medicineId: id, date: DateTime(0,0,0,time.hour,time.minute),
+      final now = DateTime.now();
+      await Future.forEach<TimeOfDay>(times, (time) async{
+        await db.addMedicineReminder(
+            MedicineReminder(medicineId: id, date: DateTime(now.year,now.month,now.day,time.hour,time.minute),
                 content: 'يرجى اخذ $unit $name ${isAfter?'بعد الطعام':'قبل الطعام'}'));
-        localNotification.scheduleDailyNotification(id: mId,time: DateTime(0,0,0,time.hour,time.minute),title: 'تذكر',body: 'يرجى اخذ $unit $name ${isAfter?'بعد الطعام':'قبل الطعام'}');
       });
       return true;
     }  catch (e) {

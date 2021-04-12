@@ -88,7 +88,7 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
         if(d != null && t != null) {
           DateTime date = DateTime(d.year,d.month,d.day,t.hour,t.minute);
           int id = await db.addDate(Date(date: date, doctorId: doctor.id,title: 'لديك موعد عند الطبيب ${doctor.name}'));
-          localNotification.scheduleNotification(id: id,body: 'لديك موعد عند الطبيب ${doctor.name}',title: 'تذكر',time: date);
+          localNotification.scheduleNotification(id: id,body: 'لديك موعد عند الطبيب ${doctor.name} بعد ساعة ',title: 'تذكر',time: date.subtract(Duration(hours: 1)));
         }
       },
     );

@@ -6,6 +6,7 @@ import 'package:haelth_app/core/data_base/tables/doctor_t.dart';
 import 'package:haelth_app/core/data_base/tables/medicine_diet_t.dart';
 import 'package:haelth_app/core/data_base/tables/medicine_t.dart';
 import 'package:haelth_app/core/data_base/tables/medicine_reminder_t.dart';
+import 'package:haelth_app/core/notifications/notifications_servece.dart';
 import 'package:moor/ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -52,7 +53,10 @@ class MyDatabase extends _$MyDatabase {
   Stream<List<MedicineReminder>> watchAllMedicineReminders(int medicineId) => (select(medicineReminders)..where((t) => t.medicineId.equals(medicineId))).watch();
 
   Future deleteMedicine(int id) => (delete(medicines)..where((t)=>t.id.equals(id))).go();
-  Future deleteDate(int id) => (delete(dates)..where((t)=>t.id.equals(id))).go();
+  Future deleteDate(int id) async{
+    await (delete(dates)..where((t)=>t.id.equals(id))).go();
+    localNotification.deleteNotification(id);
+  }
   Future deleteDoctor(int id) {
     (delete(dates)..where((tbl) => tbl.doctorId.equals(id))).go();
     return (delete(doctors)..where((t)=>t.id.equals(id))).go();
@@ -66,8 +70,16 @@ class MyDatabase extends _$MyDatabase {
     (delete(analysises)..where((tbl) => tbl.nameId.equals(id))).go();
   }
   Future deleteAnalysis(int id) => (delete(analysises)..where((t)=>t.id.equals(id))).go();
-  Future deleteMedicineReminder(int id) => (delete(medicineReminders)..where((t)=>t.id.equals(id))).go();
-  Future deleteMedicineReminders(int medicineId) => (delete(medicineReminders)..where((t)=>t.medicineId.equals(medicineId))).go();
+  Future deleteMedicineReminder(int id) async{
+    await (delete(medicineReminders)..where((t)=>t.id.equals(id))).go();
+    localNotification.deleteNotification(id);
+  }
+  Future deleteMedicineReminders(int medicineId) async {
+    final list = await (select(medicineReminders)..where((t)=>t.medicineId.equals(medicineId))).get();
+    await (delete(medicineReminders)..where((t)=>t.medicineId.equals(medicineId))).go();
+    for(var item in list)
+      localNotification.deleteNotification(item.id);
+  }
 
   Future updateMedicine(Medicine entry) => update(medicines).replace(entry);
   Future updateDate(Date entry) => update(dates).replace(entry);
@@ -82,8 +94,13 @@ class MyDatabase extends _$MyDatabase {
   Future<int> addDiet(Diet entry) => into(diets).insert(entry);
   Future<int> addAnalysisName(AnalysisName entry) => into(analysisNames).insert(entry);
   Future<int> addAnalysis(Analysis entry) => into(analysises).insert(entry);
-  Future<int> addMedicineReminder(MedicineReminder reminder) => into(medicineReminders).insert(reminder);
+  Future<int> addMedicineReminder(MedicineReminder reminder) async {
+    int id = await into(medicineReminders).insert(reminder);
+    localNotification.scheduleDailyNotification(id: id,time: reminder.date,title: 'تذكر',body: reminder.content);
+    return id;
+  }
   Future<int> addDietMedicine(MedicineDiet medicineDiet) => into(medicineDiets).insert(medicineDiet);
+
   @override
   int get schemaVersion => 1;
 

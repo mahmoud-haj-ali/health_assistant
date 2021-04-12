@@ -31,6 +31,10 @@ class LocalNotification{
     }
   }
 
+  deleteNotification(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
+  }
+
   Future<void> _notification(int id)async{
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
         "$id",
@@ -64,20 +68,23 @@ class LocalNotification{
         platformChannelSpecifics,
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
+    print('scheduled Notification with date time ${time.toString()}');
   }
+
   scheduleDailyNotification({int id, String title, String body,DateTime time})async{
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(id.toString(),title,body);
     NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
-        '$title',
-        '$body',
+        title,
+        body,
         tz.TZDateTime.from(time, tz.local),
         platformChannelSpecifics,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
         androidAllowWhileIdle: true,
         matchDateTimeComponents: DateTimeComponents.time
     );
+    print('scheduled Daily Notification with time ${time.hour.toString()+':'+time.minute.toString()}');
   }
 
 

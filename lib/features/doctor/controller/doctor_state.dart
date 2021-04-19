@@ -14,8 +14,8 @@ class DoctorState{
 
   factory DoctorState.initially([Doctor doctor]) =>
       DoctorState(
-        isNameValid: false,
-        isEdit:false,
+        isNameValid: true,
+        isEdit: false,
         name: doctor?.name,
         number: doctor?.phone,
         address: doctor?.address,

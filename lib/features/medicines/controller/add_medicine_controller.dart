@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:haelth_app/core/data_base/db/moor_db.dart';
-import 'package:haelth_app/core/notifications/notifications_servece.dart';
 import 'package:haelth_app/main.dart';
 
 class AddMedicineController{
@@ -28,7 +27,7 @@ class AddMedicineController{
                 content: 'يرجى اخذ $unit $name ${isAfter?'بعد الطعام':'قبل الطعام'}'));
       });
       return true;
-    }  catch (e) {
+    } catch (e) {
       print(e);
       return false;
     }

@@ -44,7 +44,7 @@ class _AddDoctorDialogState extends State<AddDoctorDialog> {
                   textInputAction: TextInputAction.next,
                   labelText: "إسم الطبيب",
                 ),
-                if(state.isNameValid)
+                if(!state.isNameValid)
                   Text("يرجى إدخال اسم",style: TextStyle(color: Colors.red,fontSize: 12,height: 0.5),),
                 CustomTextField(
                   onChanged: (value){
@@ -65,6 +65,7 @@ class _AddDoctorDialogState extends State<AddDoctorDialog> {
                   onChanged: (value){
                     controller.onChangeAddress(value);
                   },
+                  maxLines: 1,
                   labelText: "عنوان الطبيب",
                 ),
                 SizedBox(height: 5,),

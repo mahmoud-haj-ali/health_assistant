@@ -12,12 +12,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   @override
-  void initState() {
-    super.initState();
-    localNotification.scheduleDailyNotification(id: 10,body: 'يومي يومي يوم',title: 'تذكر',time: DateTime.now().add(Duration(minutes: 1)));
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,

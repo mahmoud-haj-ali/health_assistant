@@ -22,7 +22,7 @@ class DoctorController{
   }
 
   onChangeName(String value) =>
-    _stateController.add(_state..name = value..isNameValid = value.isEmpty);
+    _stateController.add(_state..name = value..isNameValid = value.isNotEmpty);
 
   onChangeSpecialty(value) =>
       _stateController.add(_state..specialty = value);
@@ -37,8 +37,8 @@ class DoctorController{
       _stateController.add(_state..isEdit = true);
 
   onUpdate(int id){
-    if(state.name?.isEmpty?? true){
-      _stateController.add(_state..isNameValid = true);
+    if(state.name?.trim()?.isEmpty?? true){
+      _stateController.add(_state..isNameValid = false);
     } else {
       Doctor doctor = Doctor(
           id: id,

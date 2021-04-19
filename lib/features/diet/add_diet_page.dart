@@ -18,10 +18,10 @@ class _AddDietPageState extends State<AddDietPage> {
   String name;
   String description;
   DateTimeRange range = DateTimeRange(start: DateTime.now(),end: DateTime.now().add(Duration(days: 30)));
-  String allowedFood;
-  String preventFood;
   List<Medicine> allowedMedicines = [];
   List<Medicine> notAllowedMedicines = [];
+  List<Food> allowedFood = [];
+  List<Food> notAllowedFood = [];
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +44,54 @@ class _AddDietPageState extends State<AddDietPage> {
               labelText: "اسم الحمية",
             ),
             SizedBox(height: 1.0.h,),
-            CustomTextField(
-              color: Colors.grey[200],
-              maxLines: 1,
-              margin: EdgeInsets.zero,
-              onChanged: (value) => allowedFood = value,
-              labelText: "الاطعمة المسموحة",
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black38),
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.grey[200]
+              ),
+              clipBehavior: Clip.antiAlias,
+              padding: EdgeInsets.all(7),
+              child: StatefulBuilder(
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 3.0.w),
+                              child: Text('الاطعمة المسموحة', style: TextStyle(color: Colors.black54,fontSize: 12.0.sp,fontWeight: FontWeight.w600),),
+                            ),
+                            InkWell(
+                              child: Icon(Icons.add, color: Colors.black,),
+                              onTap:() async {
+                                FocusScope.of(context).unfocus();
+                                final med = await getItem<Food>();
+                                if(med !=null)
+                                  state(()=>allowedFood.add(med));
+                              },
+                            )
+                          ],
+                        ),
+                        Wrap(
+                          spacing: 7,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            for(var item in allowedFood)
+                              Chip(
+                                label: Text(item.name),
+                                onDeleted: (){
+                                  state(() => allowedFood.remove(item));
+                                },
+                                labelPadding: EdgeInsets.only(right: 5),
+                              ),
+                          ],
+                        )
+                      ],
+                    );
+                  }
+              ),
             ),
             SizedBox(height: 1.0.h,),
             Container(
@@ -59,7 +101,57 @@ class _AddDietPageState extends State<AddDietPage> {
                   color: Colors.grey[200]
               ),
               clipBehavior: Clip.antiAlias,
-              padding: EdgeInsets.all(4),
+              padding: EdgeInsets.all(7),
+              child: StatefulBuilder(
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 3.0.w),
+                              child: Text('الاطعمة الممنوعة', style: TextStyle(color: Colors.black54,fontSize: 12.0.sp,fontWeight: FontWeight.w600),),
+                            ),
+                            InkWell(
+                              child: Icon(Icons.add, color: Colors.black,),
+                              onTap:() async {
+                                FocusScope.of(context).unfocus();
+                                final med = await getItem<Food>();
+                                if(med !=null)
+                                  state(()=>notAllowedFood.add(med));
+                              },
+                            )
+                          ],
+                        ),
+                        Wrap(
+                          spacing: 7,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            for(var item in notAllowedFood)
+                              Chip(
+                                label: Text(item.name),
+                                onDeleted: (){
+                                  state(() => notAllowedFood.remove(item));
+                                },
+                                labelPadding: EdgeInsets.only(right: 5),
+                              ),
+                          ],
+                        )
+                      ],
+                    );
+                  }
+              ),
+            ),
+            SizedBox(height: 1.0.h,),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black38),
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.grey[200]
+              ),
+              clipBehavior: Clip.antiAlias,
+              padding: EdgeInsets.all(7),
               child: StatefulBuilder(
                 builder: (context, state) {
                   return Column(
@@ -74,62 +166,8 @@ class _AddDietPageState extends State<AddDietPage> {
                           InkWell(
                             child: Icon(Icons.add, color: Colors.black,),
                             onTap:() async {
-                              List<Medicine> medicines;
-                              Medicine med;
                               FocusScope.of(context).unfocus();
-                              await showModalBottomSheet(
-                                  context: context,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                                  builder: (context){
-                                    return SingleChildScrollView(
-                                      padding: EdgeInsets.symmetric(horizontal: 2.0.w),
-                                      physics: NeverScrollableScrollPhysics(),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          RaisedButton(
-                                            onPressed: (){
-                                              Navigator.pushNamed(context, NameScreen.add_medicine_page);
-                                            },
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                            child: Center(child: Text("إضافة دواء",style: TextStyle(color: Colors.white,height: 1))),
-                                            color: Theme.of(context).primaryColor,
-                                          ),
-                                          SizedBox(
-                                            height: 25.0.h,
-                                            child: StreamBuilder<List<Medicine>>(
-                                              stream: db.watchAllMedicines,
-                                              builder: (context, snapshot) {
-                                                medicines = (snapshot.data??[]).reversed.toList();
-                                                return ListView.separated(
-                                                  itemCount:medicines.length,
-                                                  separatorBuilder: (_,__)=> SizedBox(height: 1.0.h,),
-                                                  padding: EdgeInsets.only(bottom: 1.0.h),
-                                                  itemBuilder: (context,i){
-                                                    return InkWell(
-                                                      borderRadius: BorderRadius.circular(10),
-                                                      onTap: (){
-                                                        med = medicines[i];
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Ink(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(10),
-                                                          border: Border.all(color: Colors.black26)
-                                                        ),
-                                                        padding: EdgeInsets.symmetric(vertical: 1.5.h),
-                                                        child: Center(child: Text(medicines[i].name))),
-                                                    );
-                                                  },
-                                                );
-                                              }
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }
-                              );
+                              Medicine med = await getItem<Medicine>();
                               if(med !=null)
                                 state(()=>allowedMedicines.add(med));
                             },
@@ -156,14 +194,6 @@ class _AddDietPageState extends State<AddDietPage> {
               ),
             ),
             SizedBox(height: 1.0.h,),
-            CustomTextField(
-              color: Colors.grey[200],
-              maxLines: 1,
-              margin: EdgeInsets.zero,
-              onChanged: (value) => preventFood = value,
-              labelText: "الاطعمة الممنوعة",
-            ),
-            SizedBox(height: 1.0.h,),
             Container(
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.black38),
@@ -171,7 +201,7 @@ class _AddDietPageState extends State<AddDietPage> {
                   color: Colors.grey[200]
               ),
               clipBehavior: Clip.antiAlias,
-              padding: EdgeInsets.all(4),
+              padding: EdgeInsets.all(7),
               child: StatefulBuilder(
                   builder: (context, state) {
                     return Column(
@@ -186,63 +216,8 @@ class _AddDietPageState extends State<AddDietPage> {
                             InkWell(
                               child: Icon(Icons.add, color: Colors.black,),
                               onTap:() async {
-                                List<Medicine> medicines;
-                                Medicine med;
                                 FocusScope.of(context).unfocus();
-                                await showModalBottomSheet(
-                                    context: context,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                                    builder: (context){
-                                      return SingleChildScrollView(
-                                        padding: EdgeInsets.symmetric(horizontal: 2.0.w),
-                                        physics: NeverScrollableScrollPhysics(),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            RaisedButton(
-                                              onPressed: (){
-                                                Navigator.pop(context);
-                                                Navigator.pushNamed(context, NameScreen.add_medicine_page);
-                                              },
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                              child: Center(child: Text("إضافة دواء",style: TextStyle(color: Colors.white,height: 1))),
-                                              color: Theme.of(context).primaryColor,
-                                            ),
-                                            SizedBox(
-                                              height: 25.0.h,
-                                              child: StreamBuilder<List<Medicine>>(
-                                                stream: db.watchAllMedicines,
-                                                builder: (context, snapshot) {
-                                                  medicines = (snapshot.data??[]).reversed.toList();
-                                                  return ListView.separated(
-                                                    itemCount: medicines.length,
-                                                    separatorBuilder: (_,__)=> SizedBox(height: 1.0.h,),
-                                                    padding: EdgeInsets.only(bottom: 1.0.h),
-                                                    itemBuilder: (context,i){
-                                                      return InkWell(
-                                                        borderRadius: BorderRadius.circular(10),
-                                                        onTap: (){
-                                                          med = medicines[i];
-                                                          Navigator.pop(context);
-                                                        },
-                                                        child: Ink(
-                                                            decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(10),
-                                                                border: Border.all(color: Colors.black26)
-                                                            ),
-                                                            padding: EdgeInsets.symmetric(vertical: 1.5.h),
-                                                            child: Center(child: Text(medicines[i].name))),
-                                                      );
-                                                    },
-                                                  );
-                                                }
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                );
+                                Medicine med = await getItem<Medicine>();
                                 if(med !=null)
                                   state(()=>notAllowedMedicines.add(med));
                               },
@@ -342,9 +317,96 @@ class _AddDietPageState extends State<AddDietPage> {
     );
   }
 
+  Future<T> getItem<T>()async{
+    final foodNameController = TextEditingController();
+
+    return showModalBottomSheet<T>(
+        context: context,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        builder: (context){
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 2.0.w),
+            physics: NeverScrollableScrollPhysics(),
+            child: StreamBuilder<List>(
+              stream: db.watchAll<T>(),
+              builder: (context, snapshot) {
+                final list = (snapshot.data??[]).reversed.toList();
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    (T.toString() == "Medicine")
+                    ?RaisedButton(
+                      onPressed: (){
+                          Navigator.pushNamed(context, NameScreen.add_medicine_page);
+                      },
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      child: Center(child: Text("إضافة دواء",style: TextStyle(color: Colors.white,height: 1))),
+                      color: Theme.of(context).primaryColor,
+                    )
+                    :CustomTextField(
+                      hint: "اكتب اسم جديد للاضافة",
+                      iconData: Icons.add,
+                      onIconClicked: ()async{
+                        if(foodNameController.text.trim().isNotEmpty) {
+                          await db.addFood(Food(name: foodNameController.text));
+                          foodNameController.clear();
+                        }
+                      },
+                      controller: foodNameController,
+                      margin: EdgeInsets.symmetric(vertical: 1.0.h),
+                      maxLines: 1,
+                    ),
+                    Divider(),
+                    SizedBox(
+                      height: 25.0.h,
+                      child: Card(
+                        margin: EdgeInsets.zero,
+                        elevation: 0,
+                        color: Colors.transparent,
+                        child: ListView.separated(
+                          itemCount: list.length,
+                          separatorBuilder: (_,__)=> SizedBox(height: 1.0.h,),
+                          padding: EdgeInsets.only(bottom: 1.0.h),
+                          itemBuilder: (context,i){
+                            return InkWell(
+                              borderRadius: BorderRadius.circular(10),
+                              onTap: (){
+                                Navigator.pop(context,list[i]);
+                              },
+                              child: Ink(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black26)
+                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 1.5.h),
+                                  child: Row(
+                                    children: [
+                                      Expanded(flex: 4,child: Center(child: Text(list[i].name))),
+                                      if(T.toString() == "Food")
+                                        Expanded(child: Center(child: GestureDetector(
+                                            onTap: (){
+                                              db.deleteFood(list[i].id);
+                                            },
+                                            child: Icon(Icons.cancel_outlined)))),
+                                    ],
+                                  )),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+            ),
+          );
+        }
+    );
+  }
+
   addDiet(context)async{
     try{
-      if(name.isEmpty) {
+      if(name?.isEmpty??true) {
         Scaffold.of(context).showSnackBar(
             SnackBar(content: Text('يرجى إضافة اسم',
               style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),
@@ -357,14 +419,16 @@ class _AddDietPageState extends State<AddDietPage> {
         int id = await db.addDiet(Diet(
             name: name,
             startDate: range.start,
-            allowedFood: allowedFood,
-            preventFood: preventFood,
             endDate: range.end,
             description: description));
         await Future.forEach<Medicine>(allowedMedicines, (element) =>
             db.addDietMedicine(MedicineDiet(medicineId: element.id, dietId: id, isAllowed: true)));
         await Future.forEach<Medicine>(notAllowedMedicines, (element) =>
             db.addDietMedicine(MedicineDiet(medicineId: element.id, dietId: id, isAllowed: false)));
+        await Future.forEach<Food>(allowedFood, (element) =>
+            db.addDietFood(FoodDiet(foodId: element.id, dietId: id, isAllowed: true)));
+        await Future.forEach<Food>(notAllowedFood, (element) =>
+            db.addDietFood(FoodDiet(foodId: element.id, dietId: id, isAllowed: false)));
         Navigator.pop(context);
       }
     } catch(e){

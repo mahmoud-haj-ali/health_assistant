@@ -4,8 +4,6 @@ class Diets extends Table {
 
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
-  TextColumn get allowedFood => text().nullable()();
-  TextColumn get preventFood => text().nullable()();
   TextColumn get description => text().withDefault(Constant('لايوجد وصف'))();
   DateTimeColumn get startDate => dateTime().clientDefault(()=>DateTime.now())();
   DateTimeColumn get endDate => dateTime()();

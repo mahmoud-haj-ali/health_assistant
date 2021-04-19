@@ -22,7 +22,7 @@ class AddDoctorController{
   }
 
   onChangeName(String value) =>
-    _stateController.add(_state..name = value..isNameValid = value.isEmpty);
+    _stateController.add(_state..name = value..isNameValid = value.isNotEmpty);
 
   onChangeSpecialty(value) =>
       _stateController.add(_state..specialty = value);
@@ -34,8 +34,8 @@ class AddDoctorController{
       _stateController.add(_state..address = value);
 
   Future<bool> addDoctor(Doctor doctor) async {
-    if(doctor.name?.isEmpty??true) {
-      _stateController.add(_state..isNameValid = true);
+    if(doctor.name?.trim()?.isEmpty??true) {
+      _stateController.add(_state..isNameValid = false);
       return false;
     }
     bool isSuccess = true;

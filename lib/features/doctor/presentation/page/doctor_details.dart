@@ -32,7 +32,7 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
   Widget build(BuildContext context) {
     return Provider(
       create: (_)=>_controller,
-      dispose: (_,c)=>c.dispose(),
+      dispose: (context,value) => value.dispose(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(doctor.name),
@@ -86,9 +86,10 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
             }
         );
         if(d != null && t != null) {
-          DateTime date = DateTime(d.year,d.month,d.day,t.hour,t.minute);
-          int id = await db.addDate(Date(date: date, doctorId: doctor.id,title: 'لديك موعد عند الطبيب ${doctor.name}'));
-          localNotification.scheduleNotification(id: id,body: 'لديك موعد عند الطبيب ${doctor.name} بعد ساعة ',title: 'تذكر',time: date.subtract(Duration(hours: 1)));
+          DateTime date = DateTime(d.year,d.month,d.day,t.hour,t.minute).subtract(Duration(hours: 1));
+          String message = 'لديك موعد عند الطبيب ${doctor.name}';
+          int id = await db.addDate(Date(date: date, doctorId: doctor.id,title: message));
+          localNotification.scheduleNotification(id: id,body: message, title: 'تذكر', time: date);
         }
       },
     );

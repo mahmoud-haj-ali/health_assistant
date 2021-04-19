@@ -32,7 +32,7 @@ class _DoctorsListPageState extends State<DoctorsListPage> {
           List<Doctor> doctors = snapshot.data??[];
           if(doctors.isEmpty)
             return Center(
-              child: Text("لا يوجد اطباء مضافين\nإضغط على + لإضافة طبيب",
+              child: Text("لا يوجد اطباء مضافة\nإضغط على + لإضافة طبيب",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18,height: 1.5),),
             );

@@ -7,10 +7,10 @@ class Medicines extends Table {
   TextColumn get unit => text()();
   TextColumn get notes => text().withDefault(Constant("غير محدد"))();
   IntColumn get repeat => integer()();
-  IntColumn get dietId => integer().nullable()();
   DateTimeColumn get startDate => dateTime().clientDefault(() => DateTime.now())();
   DateTimeColumn get endDate => dateTime().nullable()();
   BoolColumn get isAfter => boolean()();
+
 
   @override
   Set<Column> get primaryKey => {id};

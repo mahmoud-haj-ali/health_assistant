@@ -58,7 +58,9 @@ class LocalNotification{
 
 
   scheduleNotification({int id, String title, String body,DateTime time})async{
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(id.toString(),title,body);
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(id.toString(),title,body,
+      sound: RawResourceAndroidNotificationSound('r1'),
+    );
     NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
@@ -72,7 +74,8 @@ class LocalNotification{
   }
 
   scheduleDailyNotification({int id, String title, String body,DateTime time})async{
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(id.toString(),title,body);
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(id.toString(),title,body,
+        sound: RawResourceAndroidNotificationSound('r2'));
     NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
@@ -80,9 +83,8 @@ class LocalNotification{
         body,
         tz.TZDateTime.from(time, tz.local),
         platformChannelSpecifics,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true,
-        matchDateTimeComponents: DateTimeComponents.time
     );
     print('scheduled Daily Notification with time ${time.hour.toString()+':'+time.minute.toString()}');
   }

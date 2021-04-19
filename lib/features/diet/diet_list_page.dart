@@ -73,90 +73,10 @@ class DietListPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(diet.name,style: TextStyle(fontSize: 25.0.sp,fontWeight: FontWeight.w700,color: Theme.of(context).primaryColor),),
-                if(diet.allowedFood!=null)
-                  CustomTextField(
-                    labelText: 'الاطعمة المسموحة',
-                    enabled: false,
-                    controller: TextEditingController(text: diet.allowedFood),
-                  ),
-                if(diet.preventFood != null)
-                  CustomTextField(
-                    labelText: 'الاطعمة الممنوعة',
-                    enabled: false,
-                    controller: TextEditingController(text: diet.preventFood),
-                  ),
-                FutureBuilder(
-                  future: db.getDietMedicines(diet.id,true),
-                  builder: (context,snapshot){
-                    List<Medicine> medicines = snapshot.data??[];
-                    if(medicines.isEmpty)
-                      return SizedBox.shrink();
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black26,width: 0.4),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      padding: EdgeInsets.all(4),
-                      margin: EdgeInsets.only(bottom: 1.0.h),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(right: 3.0.w),
-                            child: Text('الادوية المصاحبة للحمية',style: TextStyle(color: Colors.black87,fontSize: 13),),
-                          ),
-                          Center(
-                            child: Wrap(
-                              spacing: 7,
-                              alignment: WrapAlignment.center,
-                              children: [
-                                for(var item in medicines)
-                                  Chip(label: Text(item.name)),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                FutureBuilder(
-                  future: db.getDietMedicines(diet.id,false),
-                  builder: (context,snapshot){
-                    List<Medicine> medicines = snapshot.data??[];
-                    if(medicines.isEmpty)
-                      return SizedBox.shrink();
-                    return Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black26,width: 0.4),
-                          borderRadius: BorderRadius.circular(10.0)
-                      ),
-                      margin: EdgeInsets.only(bottom: 1.0.h),
-                      clipBehavior: Clip.antiAlias,
-                      padding: EdgeInsets.all(4),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(right: 3.0.w),
-                            child: Text('الادوية الممنوعة',style: TextStyle(color: Colors.black87,fontSize: 13),),
-                          ),
-                          Center(
-                            child: Wrap(
-                              spacing: 7,
-                              alignment: WrapAlignment.center,
-                              children: [
-                                for(var item in medicines)
-                                  Chip(label: Text(item.name),),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                showWrapContent(title: 'الادوية المصاحبة للحمية',dietId: diet.id,isAllowed: true, isMedicines: true),
+                showWrapContent(title: 'الادوية الممنوعة',dietId: diet.id,isAllowed: false, isMedicines: true),
+                showWrapContent(title: 'الاطعمة المسموحة',dietId: diet.id,isAllowed: false, isMedicines: false),
+                showWrapContent(title: 'الاطعمة الممنوعة',dietId: diet.id,isAllowed: false, isMedicines: false),
                 Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black26,width: 0.4),
@@ -180,7 +100,8 @@ class DietListPage extends StatelessWidget {
                 CustomTextField(
                   labelText: 'ملاحظات',
                   enabled: false,
-                  controller: TextEditingController(text: diet.description??"لايوجد"),
+                  margin: EdgeInsets.zero,
+                  controller: TextEditingController(text: diet.description),
                 )
 
               ],
@@ -188,6 +109,45 @@ class DietListPage extends StatelessWidget {
           ),
         );
       }
+    );
+  }
+
+  showWrapContent({String title, bool isAllowed, int dietId,bool isMedicines}){
+    return FutureBuilder(
+      future: isMedicines?db.getDietMedicines(dietId,true):db.getDietFoods(dietId, isAllowed),
+      builder: (context,snapshot){
+        final list = snapshot.data??[];
+        if(list.isEmpty)
+          return SizedBox.shrink();
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black26,width: 0.4),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          clipBehavior: Clip.antiAlias,
+          padding: EdgeInsets.all(4),
+          margin: EdgeInsets.only(bottom: 1.0.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: 3.0.w),
+                child: Text(title,style: TextStyle(color: Colors.black87,fontSize: 13),),
+              ),
+              Center(
+                child: Wrap(
+                  spacing: 7,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    for(var item in list)
+                      Chip(label: Text(item.name)),
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

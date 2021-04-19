@@ -34,7 +34,7 @@ class DatesListWidget extends StatelessWidget {
                     margin: EdgeInsets.only(top: 100),
                     child: Center(child: CircularProgressIndicator(strokeWidth: 1,),),
                   );
-                List<Date> dates = snapshot.data.reversed.toList()??[];
+                List<Date> dates = snapshot.data?.reversed?.toList() ?? [];
                 if(dates.isEmpty)
                   return Center(
                     child: Text("لا يوجد مواعيد\nإضغط على + لإضافة موعد",
@@ -48,7 +48,7 @@ class DatesListWidget extends StatelessWidget {
                   separatorBuilder: (_,__) => SizedBox(height: 10,),
                   itemBuilder: (context,i){
                     return Material(
-                      elevation: dates[i].date.isBefore(DateTime.now())?0:3,
+                      elevation: 3,
                       color: dates[i].date.isBefore(DateTime.now())?Colors.grey.shade400:Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       child: ListTile(

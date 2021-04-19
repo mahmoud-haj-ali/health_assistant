@@ -29,7 +29,7 @@ class DoctorDetailsFields extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     labelText: "اسم الطبيب",
                   ),
-                  if(_controller.state.isNameValid)
+                  if(!_controller.state.isNameValid)
                     Align(alignment:Alignment(0.95,0.0),
                         child: Text("يرجى إدخال اسم",style: TextStyle(color: Colors.red,fontSize: 12,height: 0.5),)),
                   CustomTextField(

@@ -36,18 +36,6 @@ class MedicineDetails extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  elevation: 4,
-                  margin: EdgeInsets.only(bottom: 1.5.h),
-                  child: Column(
-                    children: [
-                      Center(child: Text('ملاحظات',
-                        style: TextStyle(fontSize: 12.0.sp,fontWeight: FontWeight.w700,color: Colors.grey[500],height: 1.8))),
-                      Text(medicine.notes??'لايوجد'),
-                    ],
-                  ),
-                ),
                 SizedBox(
                   height: 18.0.h,
                   child: Row(
@@ -128,6 +116,30 @@ class MedicineDetails extends StatelessWidget {
                     ],
                   ),
                 ),
+                FutureBuilder<Doctor>(
+                    future: db.getDoctor(medicine.doctorId),
+                    builder: (context, snapshot) {
+                      if(snapshot.data == null)
+                        return SizedBox.shrink();
+                      return Card(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        elevation: 4,
+                        margin: EdgeInsets.only(top: 1.5.h),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 4.0.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('الطبيب المشرف: ',
+                                  style: TextStyle(fontSize: 12.0.sp,fontWeight: FontWeight.w700,color: Colors.grey[500],height: 1.8)),
+                              Text(snapshot.data.name,
+                                  style: TextStyle(fontSize: 12.0.sp,fontWeight: FontWeight.w700,color: Colors.grey[800],height: 1.8)),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                ),
                 Card(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   elevation: 4,
@@ -153,6 +165,18 @@ class MedicineDetails extends StatelessWidget {
                           }
                         },
                       )
+                    ],
+                  ),
+                ),
+                Card(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  elevation: 4,
+                  margin: EdgeInsets.only(top: 1.5.h),
+                  child: Column(
+                    children: [
+                      Center(child: Text('ملاحظات',
+                          style: TextStyle(fontSize: 12.0.sp,fontWeight: FontWeight.w700,color: Colors.grey[500],height: 1.8))),
+                      Text(medicine.notes??'لايوجد'),
                     ],
                   ),
                 ),

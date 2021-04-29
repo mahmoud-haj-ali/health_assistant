@@ -10,6 +10,6 @@ class AddDoctorState {
 
   factory AddDoctorState.initially() =>
       AddDoctorState(
-          isNameValid: false
+          isNameValid: true
       );
 }

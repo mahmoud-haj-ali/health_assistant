@@ -60,8 +60,8 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
   }
 
   Widget floatingButton(){
-    return FloatingActionButton(
-      child: Icon(Icons.add,size: 35,),
+    return FloatingActionButton.extended(
+      label: Text("إضافة موعد"),
       onPressed: ()async{
         DateTime d = await showDatePicker(
             context: context,

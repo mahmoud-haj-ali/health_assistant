@@ -10,10 +10,14 @@ class AddMedicineController{
   StreamController<bool> isNameValidController = StreamController<bool>();
 
 
-  Future<bool> saveMedicine({int id, String unit, int amount, DateTimeRange range, String notes, List<TimeOfDay> times, bool isAfter}) async {
+  Future<bool> saveMedicine({int id, String unit, int amount,
+    DateTimeRange range, String notes, List<TimeOfDay> times,
+    bool isAfter,int doctorId}) async {
     try {
       final isUpdate = id != null;
-      Medicine medicine = Medicine(id: id, name: name, unit: unit, repeat: amount, startDate: range?.start, endDate: range?.end, notes: notes, isAfter: isAfter);
+      Medicine medicine = Medicine(id: id, name: name, unit: unit,
+          repeat: amount, startDate: range?.start, endDate: range?.end,
+          notes: notes, isAfter: isAfter,doctorId: doctorId);
       if(!isUpdate) {
         id = await db.addMedicine(medicine);
       } else {

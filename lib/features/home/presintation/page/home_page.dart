@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Icon(Icons.favorite_outline_outlined,color: Colors.white,size: 40,),
+              child: Image.asset("assets/img/heart.png",height: 70,),
             ),
           ],
         ),

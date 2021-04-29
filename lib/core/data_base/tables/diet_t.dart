@@ -2,7 +2,7 @@ import 'package:moor/moor.dart';
 
 class Diets extends Table {
 
-  IntColumn get id => integer().autoIncrement()();
+  IntColumn get id => integer()();
   TextColumn get name => text()();
   TextColumn get description => text().withDefault(Constant('لايوجد وصف'))();
   DateTimeColumn get startDate => dateTime().clientDefault(()=>DateTime.now())();

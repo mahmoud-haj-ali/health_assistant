@@ -72,10 +72,16 @@ class DietListPage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(diet.name,style: TextStyle(fontSize: 25.0.sp,fontWeight: FontWeight.w700,color: Theme.of(context).primaryColor),),
+                Row(
+                  children: [
+                    Expanded(flex:2, child: Divider(color: Colors.teal,endIndent: 10,thickness: 1.5,)),
+                    Expanded(child: Center(child: Text(diet.name,style: TextStyle(fontSize: 25.0.sp,fontWeight: FontWeight.w700,color: Theme.of(context).primaryColor)))),
+                    Expanded(flex:2, child: Divider(color: Colors.teal,indent: 10,thickness: 1.5,)),
+                  ],
+                ),
                 showWrapContent(title: 'الادوية المصاحبة للحمية',dietId: diet.id,isAllowed: true, isMedicines: true),
                 showWrapContent(title: 'الادوية الممنوعة',dietId: diet.id,isAllowed: false, isMedicines: true),
-                showWrapContent(title: 'الاطعمة المسموحة',dietId: diet.id,isAllowed: false, isMedicines: false),
+                showWrapContent(title: 'الاطعمة المسموحة',dietId: diet.id,isAllowed: true, isMedicines: false),
                 showWrapContent(title: 'الاطعمة الممنوعة',dietId: diet.id,isAllowed: false, isMedicines: false),
                 Container(
                   decoration: BoxDecoration(
@@ -98,7 +104,7 @@ class DietListPage extends StatelessWidget {
                   ),
                 ),
                 CustomTextField(
-                  labelText: 'ملاحظات',
+                  labelText: 'الوصف',
                   enabled: false,
                   margin: EdgeInsets.zero,
                   controller: TextEditingController(text: diet.description),
@@ -114,7 +120,7 @@ class DietListPage extends StatelessWidget {
 
   showWrapContent({String title, bool isAllowed, int dietId,bool isMedicines}){
     return FutureBuilder(
-      future: isMedicines?db.getDietMedicines(dietId,true):db.getDietFoods(dietId, isAllowed),
+      future: isMedicines?db.getDietMedicines(dietId,isAllowed):db.getDietFoods(dietId, isAllowed),
       builder: (context,snapshot){
         final list = snapshot.data??[];
         if(list.isEmpty)
@@ -140,7 +146,10 @@ class DietListPage extends StatelessWidget {
                   alignment: WrapAlignment.center,
                   children: [
                     for(var item in list)
-                      Chip(label: Text(item.name)),
+                      Chip(
+                        label: Text(item.name,style: TextStyle(color: Colors.teal),),
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(side: BorderSide(color: Colors.teal),borderRadius: BorderRadius.circular(25)),),
                   ],
                 ),
               )

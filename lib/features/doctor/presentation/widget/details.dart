@@ -58,6 +58,7 @@ class DoctorDetailsFields extends StatelessWidget {
           }
         ),
         SizedBox(height: 10,),
+        DoctorInfoWidget(doctor: doctor),
         DatesListWidget(doctor: doctor)
       ],
     );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:haelth_app/core/data_base/db/moor_db.dart';
 import 'package:haelth_app/core/util/custom_text_field.dart';
 import 'package:haelth_app/core/util/generate_screen.dart';
+import 'package:haelth_app/core/util/show.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
@@ -67,9 +68,13 @@ class _AddDietPageState extends State<AddDietPage> {
                               child: Icon(Icons.add, color: Colors.black,),
                               onTap:() async {
                                 FocusScope.of(context).unfocus();
-                                final med = await getItem<Food>();
-                                if(med !=null)
-                                  state(()=>allowedFood.add(med));
+                                final item = await getItem<Food>();
+                                if(item !=null)
+                                  if(!notAllowedFood.contains(item) && !allowedFood.contains(item)) {
+                                    state(()=>allowedFood.add(item));
+                                  } else {
+                                    showSnackBar("العنصر مضاف من قبل");
+                                  }
                               },
                             )
                           ],
@@ -117,9 +122,14 @@ class _AddDietPageState extends State<AddDietPage> {
                               child: Icon(Icons.add, color: Colors.black,),
                               onTap:() async {
                                 FocusScope.of(context).unfocus();
-                                final med = await getItem<Food>();
-                                if(med !=null)
-                                  state(()=>notAllowedFood.add(med));
+                                final item = await getItem<Food>();
+                                if(item !=null)
+                                  if(!notAllowedFood.contains(item) && !allowedFood.contains(item)) {
+                                    state(()=>notAllowedFood.add(item));
+                                  } else {
+                                    showSnackBar("العنصر مضاف من قبل");
+                                  }
+
                               },
                             )
                           ],
@@ -169,7 +179,11 @@ class _AddDietPageState extends State<AddDietPage> {
                               FocusScope.of(context).unfocus();
                               Medicine med = await getItem<Medicine>();
                               if(med !=null)
-                                state(()=>allowedMedicines.add(med));
+                                if(!allowedMedicines.contains(med) && !notAllowedMedicines.contains(med)) {
+                                  state(() => allowedMedicines.add(med));
+                                } else {
+                                  showSnackBar("العنصر مضاف من قبل");
+                                }
                             },
                           )
                         ],
@@ -218,8 +232,13 @@ class _AddDietPageState extends State<AddDietPage> {
                               onTap:() async {
                                 FocusScope.of(context).unfocus();
                                 Medicine med = await getItem<Medicine>();
-                                if(med !=null)
-                                  state(()=>notAllowedMedicines.add(med));
+                                if(med !=null) {
+                                  if(!allowedMedicines.contains(med) && !notAllowedMedicines.contains(med)) {
+                                    state(() => notAllowedMedicines.add(med));
+                                  } else {
+                                    showSnackBar("العنصر مضاف من قبل");
+                                  }
+                            }
                               },
                             )
                           ],
@@ -347,9 +366,15 @@ class _AddDietPageState extends State<AddDietPage> {
                       hint: "اكتب اسم جديد للاضافة",
                       iconData: Icons.add,
                       onIconClicked: ()async{
+                        FocusScope.of(context).unfocus();
                         if(foodNameController.text.trim().isNotEmpty) {
-                          await db.addFood(Food(name: foodNameController.text));
-                          foodNameController.clear();
+                          if(!list.any((element) => element.name == foodNameController.text.trim())) {
+                                await db.addFood(
+                                    Food(name: foodNameController.text));
+                                foodNameController.clear();
+                           } else {
+                                showSnackBar("الاسم مضاف من قبل");
+                          }
                         }
                       },
                       controller: foodNameController,
@@ -407,14 +432,7 @@ class _AddDietPageState extends State<AddDietPage> {
   addDiet(context)async{
     try{
       if(name?.isEmpty??true) {
-        Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text('يرجى إضافة اسم',
-              style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),
-              duration: Duration(seconds: 1),
-              margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ));
+        showSnackBar('يرجى إضافة اسم');
       } else {
         int id = await db.addDiet(Diet(
             name: name,
@@ -433,14 +451,7 @@ class _AddDietPageState extends State<AddDietPage> {
       }
     } catch(e){
       print(e);
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text('عذرا حصل خطأ',
-            style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),
-            duration: Duration(seconds: 1),
-            margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          ));
+      showSnackBar('عذرا حصل خطأ');
     }
   }
 

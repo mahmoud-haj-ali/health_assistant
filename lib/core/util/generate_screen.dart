@@ -49,7 +49,7 @@ class GenerateScreen {
         }
       case NameScreen.add_analysis_page:
         {
-          return CupertinoPageRoute(builder: (context) => AddAnalysisPage());
+          return CupertinoPageRoute(builder: (context) => AddAnalysisPage(name: args,));
         }
       case NameScreen.analysis_details_page:
         {

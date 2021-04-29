@@ -25,6 +25,8 @@ class CustomTextField extends StatelessWidget {
 
   final IconData iconData;
 
+  final EdgeInsets contentPadding;
+
   const CustomTextField({Key key,
     this.onChanged,
     this.textInputAction,
@@ -42,7 +44,11 @@ class CustomTextField extends StatelessWidget {
     this.height,
     this.color,
     this.radius = 10,
-    this.onSubmitted, this.hint, this.onIconClicked, this.iconData
+    this.onSubmitted,
+    this.hint,
+    this.onIconClicked,
+    this.iconData,
+    this.contentPadding = const EdgeInsets.fromLTRB(0.0,25,15,0)
   }) : super(key: key);
 
   @override
@@ -54,43 +60,37 @@ class CustomTextField extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextFormField(
-              onChanged: onChanged,
-              onFieldSubmitted: onSubmitted,
-              controller: controller,
-              textInputAction: textInputAction,
-              keyboardType: keyboardType,
-              enabled: enabled,
-              expands: expands,
-              maxLines: maxLines,
-              minLines: minLines,
-              textAlignVertical: TextAlignVertical.top,
-              initialValue: initialValue,
-              style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),
-              decoration: InputDecoration(
-                hintText: hint,
-                labelText: labelText,
-                alignLabelWithHint: true,
-                isDense: true,
-                contentPadding: EdgeInsets.fromLTRB(0.0,25,15,0),
-                labelStyle: const TextStyle(fontSize: 14),
-                prefixIcon: prefix,
-                prefixIconConstraints: BoxConstraints(minWidth: 30),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(radius),
-                ),
-                suffixIconConstraints: BoxConstraints(maxHeight: 5.0.h,minHeight:1.0.h,minWidth: 10.0.w,maxWidth: 10.0.w),
-                suffixIcon: (onIconClicked != null)
-                    ?GestureDetector(
-                    onTap: onIconClicked,
-                    child: Icon(iconData)):null
-              ),
-            ),
+      child: TextFormField(
+        onChanged: onChanged,
+        onFieldSubmitted: onSubmitted,
+        controller: controller,
+        textInputAction: textInputAction,
+        keyboardType: keyboardType,
+        enabled: enabled,
+        expands: expands,
+        maxLines: maxLines,
+        minLines: minLines,
+        textAlignVertical: TextAlignVertical.top,
+        initialValue: initialValue,
+        style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),
+        decoration: InputDecoration(
+          hintText: hint,
+          labelText: labelText,
+          alignLabelWithHint: true,
+          isDense: true,
+          contentPadding: contentPadding,
+          labelStyle: const TextStyle(fontSize: 14),
+          prefixIcon: prefix,
+          prefixIconConstraints: BoxConstraints(minWidth: 30),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radius),
           ),
-        ],
+          suffixIconConstraints: BoxConstraints(maxHeight: 5.0.h,minHeight:1.0.h,minWidth: 10.0.w,maxWidth: 10.0.w),
+          suffixIcon: (onIconClicked != null)
+              ?GestureDetector(
+              onTap: onIconClicked,
+              child: Icon(iconData)):null
+        ),
       ),
     );
   }

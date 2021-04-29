@@ -2,7 +2,7 @@ import 'package:moor/moor.dart';
 
 class FoodDiets extends Table {
 
-  IntColumn get id => integer().autoIncrement()();
+  IntColumn get id => integer()();
   IntColumn get foodId => integer()();
   IntColumn get dietId => integer()();
   BoolColumn get isAllowed => boolean()();

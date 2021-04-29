@@ -39,7 +39,7 @@ class AnalysisNamesPage extends StatelessWidget {
             itemBuilder: (context,i){
               return CustomListTile(
                 title: "اسم التحليل: ${names[i].name}",
-                subtitle: "تاريخ آخر تحليل: ${DateFormat('dd-MM-yyyy').format(names[i].lastDate)}",
+                subtitle: names[i].lastDate==null?"لم يتم أضافة نتيجة":"تاريخ آخر تحليل: ${DateFormat('dd-MM-yyyy').format(names[i].lastDate)}",
                 icon: Icons.analytics_outlined,
                 onTap: (){
                   Navigator.pushNamed(context, NameScreen.analysis_dates_list_page,arguments: names[i]);
@@ -47,7 +47,7 @@ class AnalysisNamesPage extends StatelessWidget {
                 onIconTap: (){
                   showDialog(context: context,
                       builder: (cxt) => AlertDeleteDialog(
-                        subtext: 'سيتم حذف جميع تحاليل ${names[i].name}',
+                        subtext: 'سيتم حذف جميع نتائج ${names[i].name}',
                         onDelete: ()=> db.deleteAnalysisName(names[i].id),
                       ));
                 },

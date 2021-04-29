@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:haelth_app/features/home/presintation/page/home_page.dart';
 import 'package:sizer/sizer_util.dart';
 import 'core/data_base/db/moor_db.dart';
@@ -21,7 +22,7 @@ class App extends StatelessWidget {
         return OrientationBuilder(
           builder: (context,orientation){
             SizerUtil().init(constraints, orientation);
-            return MaterialApp(
+            return GetMaterialApp(
                 title: "المساعد الصحي",
                 theme: ThemeData(fontFamily: "Tajawal",
                     primaryColor: Colors.teal,

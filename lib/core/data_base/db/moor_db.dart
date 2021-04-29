@@ -32,8 +32,11 @@ class MyDatabase extends _$MyDatabase {
   Future<List<Diet>> get getAllDiets => select(diets).get();
   Future<List<Medicine>> get getAllMedicines => select(medicines).get();
   Future<List<Food>> get getAllFoods => select(foods).get();
+  Future<List<Medicine>> getDoctorMedicines(int doctorId) => (select(medicines)..where((tbl) => tbl.doctorId.equals(doctorId))).get();
+  Future<List<Analysis>> getDoctorAnalysis(int doctorId) => (select(analysises)..where((tbl) => tbl.doctorId.equals(doctorId))).get();
   Future<List<Analysis>> getAllAnalysis(int nameId) => (select(analysises)..where((tbl) => tbl.nameId.equals(nameId))).get();
   Future<List<MedicineReminder>> getMedicineReminders(medicineId) => (select(medicineReminders)..where((tbl) => tbl.medicineId.equals(medicineId))).get();
+  Future<Doctor> getDoctor(int doctorId) => (select(doctors)..where((tbl) => tbl.id.equals(doctorId))).getSingle();
   Future<List<Medicine>> getDietMedicines(int dietId,bool isAllowed) async {
     final query = customSelect(
         'select medicines.* '
@@ -126,5 +129,6 @@ class MyDatabase extends _$MyDatabase {
 
   @override
   int get schemaVersion => 1;
+
 
 }

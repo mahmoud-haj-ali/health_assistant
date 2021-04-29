@@ -21,9 +21,9 @@ class AnalysisDatesPage extends StatelessWidget {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        label: Text('إضافة تحليل',style: TextStyle(height: 2),),
+        label: Text('إضافة نتيجة',style: TextStyle(height: 2),),
         highlightElevation: 0,
-        onPressed: () => Navigator.pushNamed(context, NameScreen.add_analysis_page),
+        onPressed: () => Navigator.pushNamed(context, NameScreen.add_analysis_page,arguments: name),
       ),
       body: StreamBuilder<List<Analysis>>(
           stream: db.watchAllAnalysis(name.id),

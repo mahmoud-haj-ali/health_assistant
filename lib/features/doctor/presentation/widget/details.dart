@@ -5,6 +5,9 @@ import 'package:haelth_app/features/doctor/controller/doctor_controller.dart';
 import 'package:haelth_app/features/doctor/presentation/widget/dates_list.dart';
 import 'package:provider/provider.dart';
 
+import 'dates_list.dart';
+import 'doctor_info.dart';
+
 class DoctorDetailsFields extends StatelessWidget {
 
   final Doctor doctor;
@@ -57,7 +60,6 @@ class DoctorDetailsFields extends StatelessWidget {
             );
           }
         ),
-        SizedBox(height: 10,),
         DoctorInfoWidget(doctor: doctor),
         DatesListWidget(doctor: doctor)
       ],

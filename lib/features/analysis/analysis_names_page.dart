@@ -6,6 +6,7 @@ import 'package:haelth_app/core/util/custom_list_tile.dart';
 import 'package:haelth_app/core/util/generate_screen.dart';
 import 'package:haelth_app/main.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 class AnalysisNamesPage extends StatelessWidget {
 
@@ -33,16 +34,16 @@ class AnalysisNamesPage extends StatelessWidget {
             return Center(child: Text('لايوجد تحاليل مضافة'));
           return ListView.separated(
             itemCount: names.length,
-            padding: EdgeInsets.only(bottom: 60,left: 5,right: 5,top: 5),
+            padding: EdgeInsets.only(bottom: 10.0.h,left: 1.0.w,right: 1.0.w,top: 1.0.h),
             physics: BouncingScrollPhysics(),
-            separatorBuilder: (_,__) => SizedBox(height: 10,),
+            separatorBuilder: (_,__) => SizedBox(height: 1.5.h,),
             itemBuilder: (context,i){
               return CustomListTile(
                 title: "اسم التحليل: ${names[i].name}",
                 subtitle: names[i].lastDate==null?"لم يتم أضافة نتيجة":"تاريخ آخر تحليل: ${DateFormat('dd-MM-yyyy').format(names[i].lastDate)}",
                 icon: Icons.analytics_outlined,
                 onTap: (){
-                  Navigator.pushNamed(context, NameScreen.analysis_dates_list_page,arguments: names[i]);
+                  Navigator.pushNamed(context, NameScreen.analysis_dates_list_page,arguments: {"name":names[i]});
                 },
                 onIconTap: (){
                   showDialog(context: context,

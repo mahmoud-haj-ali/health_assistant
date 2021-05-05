@@ -62,6 +62,8 @@ class LocalNotification{
       sound: RawResourceAndroidNotificationSound('r1'),
     );
     NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+    if(time.isBefore(DateTime.now()))
+      time = time.add(Duration(days: 10));
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         '$title',
@@ -77,6 +79,8 @@ class LocalNotification{
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(id.toString(),title,body,
         sound: RawResourceAndroidNotificationSound('r2'));
     NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+    if(time.isBefore(DateTime.now()))
+      time = time.add(Duration(days: 10));
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,

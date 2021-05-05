@@ -44,7 +44,7 @@ class _AddAnalysisPageState extends State<AddAnalysisPage> {
       onTap: ()=>FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(analysisName!=null?'إضافة نتيجة':'إضافة تحليل'),
+          title: Text(widget.name!=null?'إضافة نتيجة':'إضافة تحليل'),
           centerTitle: true,
         ),
         body: Padding(
@@ -74,7 +74,7 @@ class _AddAnalysisPageState extends State<AddAnalysisPage> {
                                   border: Border.all(color: Colors.black12)
                                 ),
                                 alignment: Alignment.center,
-                                child: Center(child: Text(analysisName?.name??"اضغط للتحديد"),),
+                                child: Center(child: Text(analysisName?.name??"اضغط لإختيار اسم",textAlign: TextAlign.center,),),
                               ),
                             ),
                           ),
@@ -248,7 +248,7 @@ class _AddAnalysisPageState extends State<AddAnalysisPage> {
                   child: Center(
                     child: Row(
                       children: [
-                        Expanded(child: Text('   تاريخ التحليل:')),
+                        Expanded(child: Text('   تاريخ ${widget.name == null?"التحليل":"النتيجة"}')),
                         Expanded(child: Text(DateFormat('yyyy-MM-dd').format(dateTime),style: TextStyle(height: 1.5),)),
                       ],
                     ),
@@ -278,9 +278,13 @@ class _AddAnalysisPageState extends State<AddAnalysisPage> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                   onPressed: ()async{
-                    if(value.isEmpty || analysisName.name.isEmpty){
+                    if(analysisName.name.isEmpty){
                       checkValidate = true;
                       setState(() {});
+                    } else if(value.isEmpty && image == null){
+                      showSnackBar("يرجى إضافة نتيجة او صورة");
+                    }  else if(doctor == null){
+                      showSnackBar("يرجى إضافة طبيب مشرف");
                     } else {
                       Analysis analysis = Analysis(lastDate: dateTime,
                           nameId: analysisName.id, notes: notes,

@@ -45,7 +45,7 @@ class GenerateScreen {
         }
       case NameScreen.analysis_dates_list_page:
         {
-          return CupertinoPageRoute(builder: (context) => AnalysisDatesPage(name: args,));
+          return CupertinoPageRoute(builder: (context) => AnalysisDatesPage(name: (args as Map)["name"],doctor: (args as Map)["doctor"],));
         }
       case NameScreen.add_analysis_page:
         {

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:haelth_app/core/data_base/db/moor_db.dart';
+import 'package:haelth_app/core/notifications/notifications_servece.dart';
+import 'package:haelth_app/core/util/show.dart';
 import 'package:haelth_app/main.dart';
 
 import 'add_doctor_state.dart';
@@ -13,6 +15,8 @@ class AddDoctorController{
 
   AddDoctorState _state = AddDoctorState.initially();
   AddDoctorState get state => _state;
+
+  DateTime date;
 
   final StreamController<AddDoctorState> _stateController = StreamController<AddDoctorState>();
   Stream<AddDoctorState> get streamState => _stateController.stream;
@@ -38,11 +42,20 @@ class AddDoctorController{
       _stateController.add(_state..isNameValid = false);
       return false;
     }
+    if(date == null){
+      showSnackBar("يرجى إضافة موعد");
+      return false;
+    }
     bool isSuccess = true;
-    await db.addDoctor(doctor).catchError((e){
+    int id = await db.addDoctor(doctor).catchError((e){
       print(e);
       isSuccess = false;
     });
+    if(date != null) {
+      String message = 'لديك موعد عند الطبيب ${doctor.name}';
+      int dateId = await db.addDate(Date(date: date, doctorId: id,title: message));
+      localNotification.scheduleNotification(id: dateId,body: message, title: 'تذكر', time: date.subtract(Duration(hours: 1)));
+    }
     return isSuccess;
   }
 

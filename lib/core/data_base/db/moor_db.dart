@@ -37,6 +37,7 @@ class MyDatabase extends _$MyDatabase {
   Future<List<Analysis>> getAllAnalysis(int nameId) => (select(analysises)..where((tbl) => tbl.nameId.equals(nameId))).get();
   Future<List<MedicineReminder>> getMedicineReminders(medicineId) => (select(medicineReminders)..where((tbl) => tbl.medicineId.equals(medicineId))).get();
   Future<Doctor> getDoctor(int doctorId) => (select(doctors)..where((tbl) => tbl.id.equals(doctorId))).getSingle();
+
   Future<List<Medicine>> getDietMedicines(int dietId,bool isAllowed) async {
     final query = customSelect(
         'select medicines.* '
@@ -45,6 +46,7 @@ class MyDatabase extends _$MyDatabase {
         'and medicine_diets.diet_id=$dietId and medicine_diets.is_allowed=$isAllowed');
     return (await query.get()).map((e)=>Medicine.fromJson(e.data)).toList();
   }
+
   Future<List<Food>> getDietFoods(int dietId,bool isAllowed) async {
     final query = customSelect(
         'select foods.* '
@@ -70,6 +72,10 @@ class MyDatabase extends _$MyDatabase {
   Stream<List<Doctor>> watchDoctor(int doctorId) => (select(doctors)..where((t) => t.id.equals(doctorId))).watch();
   Stream<Medicine> watchMedicine(int medicineId) => (select(medicines)..where((t) => t.id.equals(medicineId))).watchSingle();
   Stream<List<Analysis>> watchAllAnalysis(int analysisNameId) => (select(analysises)..where((t) => t.nameId.equals(analysisNameId))).watch();
+  Stream<List<Analysis>> watchAllDoctorAnalysis(int analysisNameId,int doctorId) => (select(analysises)
+    ..where((t) => t.nameId.equals(analysisNameId))
+    ..where((t) => t.doctorId.equals(doctorId))
+  ).watch();
   Stream<List<Date>> watchAllDoctorDates(int doctorId) => (select(dates)..where((t) => t.doctorId.equals(doctorId))).watch();
   Stream<List<MedicineReminder>> watchAllMedicineReminders(int medicineId) => (select(medicineReminders)..where((t) => t.medicineId.equals(medicineId))).watch();
 

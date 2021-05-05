@@ -6,11 +6,14 @@ import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:haelth_app/core/data_base/db/moor_db.dart';
 
+import '../../main.dart';
+
 class AnalysisDetailsPage extends StatelessWidget {
 
   final Analysis analysis;
 
   const AnalysisDetailsPage({Key key, this.analysis}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +25,7 @@ class AnalysisDetailsPage extends StatelessWidget {
         children: [
           if(analysis.image != null)
             Container(
-               height: 25.0.h,
+               height: 30.0.h,
                width: double.infinity,
                color: Colors.grey[300],
                child: GestureDetector(
@@ -52,11 +55,11 @@ class AnalysisDetailsPage extends StatelessWidget {
                     child: Column(
                       children: [
                         Expanded(flex:2,child: Align(
-                          alignment: Alignment(0.0,2.0),
-                          child: Text(analysis.value.toString(),
-                            style: TextStyle(color: Theme.of(context).primaryColor,fontSize: 60.0.sp,fontWeight: FontWeight.w700),),
+                          alignment: Alignment(0.0,analysis.value.isEmpty?0.5:2.0),
+                          child: Text(analysis.value.isEmpty ? "لايوجد نتيجة" : analysis.value,
+                            style: TextStyle(color: Theme.of(context).primaryColor,fontSize:analysis.value.isEmpty?20.0.sp: 60.0.sp,fontWeight: FontWeight.w700),),
                         )),
-                        Expanded(child: Center(child: Text('نسبة التحليل'))),
+                        Expanded(child: Center(child: Text('النتيجة'))),
                       ],
                     ),
                   ),
@@ -81,7 +84,23 @@ class AnalysisDetailsPage extends StatelessWidget {
               ],
             ),
           ),
-          if(analysis.notes != null)
+          if(analysis.doctorId != null)
+          FutureBuilder<Doctor>(
+            future: db.getDoctor(analysis.doctorId),
+            builder: (context, snapshot) {
+              if(!snapshot.hasData)
+                return SizedBox.shrink();
+              return Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 2.0.w,vertical: 1.0.h),
+                  child: Center(child: Text('بإشراف الطبيب ${snapshot.data.name}')),
+                ),
+              );
+            }
+          ),
+          if(analysis.notes != null && analysis.notes.trim().isNotEmpty)
           Card(
             elevation: 4,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -92,7 +111,7 @@ class AnalysisDetailsPage extends StatelessWidget {
                 children: [
                   Text('ملاحظات:',style: TextStyle(color: Colors.grey),),
                   SizedBox(height: 1.0.h,),
-                  Text(analysis.notes)
+                  Center(child: Text(analysis.notes))
                 ],
               ),
             ),

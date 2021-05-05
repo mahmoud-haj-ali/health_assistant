@@ -10,8 +10,8 @@ import '../../main.dart';
 
 class AnalysisDatesPage extends StatelessWidget {
   final AnalysisName name;
-
-  const AnalysisDatesPage({Key key, this.name}) : super(key: key);
+  final Doctor doctor;
+  const AnalysisDatesPage({Key key, this.name, this.doctor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class AnalysisDatesPage extends StatelessWidget {
         onPressed: () => Navigator.pushNamed(context, NameScreen.add_analysis_page,arguments: name),
       ),
       body: StreamBuilder<List<Analysis>>(
-          stream: db.watchAllAnalysis(name.id),
+          stream: doctor == null ? db.watchAllAnalysis(name.id) : db.watchAllDoctorAnalysis(name.id, doctor.id),
           builder: (context, snapshot) {
             if(snapshot.connectionState == ConnectionState.waiting)
               return Center(child: CircularProgressIndicator());
@@ -53,9 +53,9 @@ class AnalysisDatesPage extends StatelessWidget {
                         Column(
                           children: [
                             Expanded(flex:2,child: Align(
-                              alignment: Alignment(0.0,2.0),
-                              child: Text(analysis[i].value.toString(),
-                                style: TextStyle(color: Theme.of(context).primaryColor,fontSize: 60.0.sp,fontWeight: FontWeight.w700),),
+                              alignment: Alignment(0.0,analysis[i].value.isEmpty?0.5:2.0),
+                              child: Text(analysis[i].value.isEmpty ? "اضغط للتفاصيل" : analysis[i].value,
+                                style: TextStyle(color: Theme.of(context).primaryColor,fontSize: analysis[i].value.isEmpty ? 14.0.sp:60.0.sp,fontWeight: FontWeight.w700),),
                             )),
                             Expanded(child: Center(child: Text(DateFormat('yyyy-MM-dd').format(analysis[i].lastDate)))),
                           ],

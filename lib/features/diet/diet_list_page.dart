@@ -35,7 +35,7 @@ class DietListPage extends StatelessWidget {
             return Center(child: Text('لايوجد حميات مضافة'));
           return ListView.separated(
             itemCount: diets.length,
-            padding: EdgeInsets.only(bottom: 60,left: 5,right: 5,top: 5),
+            padding: EdgeInsets.only(bottom: 10.0.h,left: 1.0.w,right: 1.0.w,top: 1.0.h),
             physics: BouncingScrollPhysics(),
             separatorBuilder: (_,__) => SizedBox(height: 10,),
             itemBuilder: (context,i){
@@ -74,9 +74,14 @@ class DietListPage extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Expanded(flex:2, child: Divider(color: Colors.teal,endIndent: 10,thickness: 1.5,)),
-                    Expanded(child: Center(child: Text(diet.name,style: TextStyle(fontSize: 25.0.sp,fontWeight: FontWeight.w700,color: Theme.of(context).primaryColor)))),
-                    Expanded(flex:2, child: Divider(color: Colors.teal,indent: 10,thickness: 1.5,)),
+                    Flexible(child: Divider(color: Colors.teal,endIndent: 10,thickness: 1.5,)),
+                    Flexible(
+                      flex: 2,
+                      child: Center(child: Text(diet.name,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 22.0.sp,fontWeight: FontWeight.w700,color: Theme.of(context).primaryColor))),
+                    ),
+                    Flexible(child: Divider(color: Colors.teal,indent: 10,thickness: 1.5,)),
                   ],
                 ),
                 showWrapContent(title: 'الادوية المصاحبة للحمية',dietId: diet.id,isAllowed: true, isMedicines: true),
@@ -87,9 +92,7 @@ class DietListPage extends StatelessWidget {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black26,width: 0.4),
                       borderRadius: BorderRadius.circular(10.0),
-                      // color: Colors.grey[200]
                   ),
-                  clipBehavior: Clip.antiAlias,
                   padding: EdgeInsets.fromLTRB(10.0,5.0,10.0,7.0),
                   margin: EdgeInsets.only(bottom: 1.0.h),
                   child: Column(
@@ -107,7 +110,7 @@ class DietListPage extends StatelessWidget {
                   labelText: 'الوصف',
                   enabled: false,
                   margin: EdgeInsets.zero,
-                  controller: TextEditingController(text: diet.description),
+                  initialValue: diet.description,
                 )
 
               ],

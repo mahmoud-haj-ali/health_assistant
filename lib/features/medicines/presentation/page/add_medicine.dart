@@ -380,12 +380,15 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                     if(controller.name.trim().isEmpty) {
                       controller.isNameValidController.add(false);
                       return;
-                    }
-                    else if(widget.medicine == null &&((await db.getAllMedicines).any((element) => element.name.trim() == controller.name))){
+                    } else if(widget.medicine == null &&
+                        ((await db.getAllMedicines).any((element) => element.name.trim() == controller.name))){
                       showSnackBar('الدواء موجود من قبل');
                       return;
                     } else if(times.isEmpty){
                       showSnackBar('يرجى اضافة موعد تنبيه واحد على الاقل');
+                      return;
+                    } else if(doctor == null){
+                      showSnackBar('يرجى تحديد الطبيب المشرف');
                       return;
                     }
                     bool isSuccess = await controller.saveMedicine(

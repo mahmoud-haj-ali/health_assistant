@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haelth_app/core/notifications/notifications_servece.dart';
+import 'package:sizer/sizer.dart';
 import 'package:haelth_app/core/util/generate_screen.dart';
 import 'package:haelth_app/features/home/presintation/widget/main_card.dart';
 
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget header(){
     return SizedBox(
-      height: 130,
+      height: 20.0.h,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: Row(
